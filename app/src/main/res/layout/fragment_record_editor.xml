@@ -1,0 +1,185 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="cn.leslie.financemanager.RecordEditorFragment">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio_income"
+            android:layout_marginLeft="@dimen/default_widget_margin"
+            android:paddingLeft="@dimen/default_widget_padding"
+            android:paddingBottom="@dimen/default_widget_padding"
+            android:paddingTop="@dimen/default_widget_padding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/income"
+            android:textSize="20sp"
+            android:layout_weight="1.0" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_orange_dark"/>
+
+        <RadioButton
+            android:id="@+id/radio_outcome"
+            android:layout_marginLeft="@dimen/default_widget_margin"
+            android:paddingLeft="@dimen/default_widget_padding"
+            android:paddingBottom="@dimen/default_widget_padding"
+            android:paddingTop="@dimen/default_widget_padding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/outcome"
+            android:textSize="20sp"
+            android:layout_weight="1.0"
+            android:checked="true"/>
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_orange_dark"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio_male"
+            android:layout_marginLeft="@dimen/default_widget_margin"
+            android:paddingBottom="@dimen/default_widget_padding"
+            android:paddingTop="@dimen/default_widget_padding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/male"
+            android:textSize="20sp"
+            android:layout_weight="1.0" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_orange_dark"/>
+
+        <RadioButton
+            android:id="@+id/radio_female"
+            android:layout_marginLeft="@dimen/default_widget_margin"
+            android:paddingBottom="@dimen/default_widget_padding"
+            android:paddingTop="@dimen/default_widget_padding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/female"
+            android:textSize="20sp"
+            android:layout_weight="1.0"
+            android:checked="true"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_orange_dark"/>
+
+        <RadioButton
+            android:id="@+id/radio_all"
+            android:layout_marginLeft="@dimen/default_widget_margin"
+            android:paddingBottom="@dimen/default_widget_padding"
+            android:paddingTop="@dimen/default_widget_padding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/all"
+            android:textSize="20sp"
+            android:layout_weight="1.0"
+            android:checked="true"/>
+    </RadioGroup>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_orange_dark"/>
+
+    <EditText
+        android:id="@+id/input_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/default_widget_margin"
+        android:layout_marginRight="@dimen/default_widget_margin"
+        android:layout_marginTop="@dimen/default_widget_margin"
+        android:inputType="numberDecimal"/>
+
+    <View
+        android:layout_marginTop="@dimen/default_widget_padding"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_orange_dark"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@drawable/bg_button_default"
+            android:text="@string/category"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_orange_dark"/>
+
+        <Button
+            android:id="@+id/btn_sub_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@drawable/bg_button_default"
+            android:text="@string/sub_category"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_orange_dark"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@drawable/bg_button_default"
+            android:text="@string/date"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_orange_dark"/>
+
+        <Button
+            android:id="@+id/btn_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@drawable/bg_button_default"
+            android:text="@string/time"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_orange_dark"/>
+
+</LinearLayout>

@@ -73,7 +73,6 @@ public class DataManager {
         return sInstance;
     }
 
-
     /**
      * @return all the records.
      */
@@ -81,6 +80,13 @@ public class DataManager {
         List<Record> list = getListWithFilter(mDataSets.get(Record.class), null);
         Collections.sort(list);
         return list;
+    }
+
+    /**
+     * @return the record according given id.
+     */
+    public Record getRecordById(Long id) {
+        return (Record) mDataSets.get(Record.class).getById(id);
     }
 
     public boolean addRecord(Record record) {
@@ -144,6 +150,10 @@ public class DataManager {
             mClazz = clazz;
             mCollectionType = mObjectMapper.getTypeFactory()
                     .constructCollectionType(ArrayList.class, mClazz);
+        }
+
+        public T getById(Long id) {
+            return getData().get(id);
         }
 
         private String getName() {

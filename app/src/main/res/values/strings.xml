@@ -18,5 +18,7 @@
     <string name="choose_category">选择类别:</string>
     <string name="choose_sub_category">选择子类别:</string>
     <string name="date_and_time_template">yyyy-MM-dd HH:mm</string>
+    <string name="title_activity_edit_record">修改记录</string>
+    <string name="save_record_failed">保存失败</string>
 
 </resources>
