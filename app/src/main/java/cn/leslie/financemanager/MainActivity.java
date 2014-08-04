@@ -6,15 +6,25 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.List;
+
+import cn.leslie.financemanager.data.DataManager;
+import cn.leslie.financemanager.data.Record;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -30,8 +40,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private RadioButton mAll;
     private RadioButton mMale;
     private RadioButton mFemale;
+    private EditText mAmount;
 
     private Calendar mRecordTime;
+    private RecordAdapter mRecordAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +59,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mAll = (RadioButton) findViewById(R.id.radio_all);
         mMale = (RadioButton) findViewById(R.id.radio_male);
         mFemale = (RadioButton) findViewById(R.id.radio_female);
+        mAmount = (EditText) findViewById(R.id.input_amount);
 
         mCategory.setOnClickListener(this);
         mSubCategory.setOnClickListener(this);
         mDate.setOnClickListener(this);
         mTime.setOnClickListener(this);
+
+        ListView listRecord = (ListView) findViewById(R.id.list_record);
+        mRecordAdapter = new RecordAdapter(DataManager.getInstance().getRecords());
+        listRecord.setAdapter(mRecordAdapter);
     }
 
     @Override
@@ -75,9 +92,41 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_save) {
+            save();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private int getType() {
+        if (mIncome.isChecked()) {
+            return Record.TYPE_INCOME;
+        } else {
+            return Record.TYPE_OUTCOME;
+        }
+    }
+
+    private int getPerson() {
+        if (mMale.isChecked()) {
+            return Record.PERSON_MALE;
+        } else if (mFemale.isChecked()) {
+            return Record.PERSON_FEMALE;
+        } else {
+            return Record.PERSON_ALL;
+        }
+    }
+
+    private void save() {
+        Record record = new Record();
+        record.setAmount(Float.parseFloat(mAmount.getText().toString()));
+        record.setCreated(mRecordTime.getTimeInMillis());
+        record.setUpdated(mRecordTime.getTimeInMillis());
+        record.setCategory(1);
+        record.setSubCategory(2);
+        record.setType(getType());
+        record.setPerson(getPerson());
+        DataManager.getInstance().addRecord(record);
+        mRecordAdapter.setRecords(DataManager.getInstance().getRecords());
     }
 
     private void onRecordTimeUpdated() {
@@ -138,7 +187,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 onRecordTimeUpdated();
             }
         }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true);
-        datePickerDialog.setTitle(R.string.set_date);
+        datePickerDialog.setTitle(R.string.set_time);
         datePickerDialog.show();
     }
 
@@ -160,5 +209,69 @@ public class MainActivity extends Activity implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    private class RecordAdapter extends BaseAdapter {
+        private List<Record> mRecords;
+
+        RecordAdapter(List<Record> records) {
+            setRecords(records);
+        }
+
+        public void setRecords(List<Record> records) {
+            mRecords = records;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getCount() {
+            return mRecords == null ? 0 : mRecords.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return mRecords.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return mRecords.get(i).getId();
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+            ViewHolder viewHolder;
+
+            if (convertView != null) {
+                view = convertView;
+                viewHolder = (ViewHolder) convertView.getTag();
+            } else {
+                view = LayoutInflater.from(MainActivity.this).inflate(
+                        R.layout.item_record, parent, false);
+                viewHolder = new ViewHolder();
+                viewHolder.mTitle = (TextView) view.findViewById(R.id.text_title);
+                viewHolder.mCategory = (TextView) view.findViewById(R.id.text_category);
+                viewHolder.mDatetime = (TextView) view.findViewById(R.id.text_datetime);
+                viewHolder.mSubCategory = (TextView) view.findViewById(R.id.text_sub_category);
+                view.setTag(viewHolder);
+            }
+
+            Record record = (Record) getItem(position);
+            viewHolder.mTitle.setText(record.getType() == Record.TYPE_INCOME
+                    ? getString(R.string.income) : getString(R.string.outcome)
+                    + " : " + record.getAmount());
+            viewHolder.mCategory.setText(record.getCategory() + "");
+            viewHolder.mDatetime.setText(record.getCreatedTimeText(MainActivity.this));
+            viewHolder.mSubCategory.setText(record.getSubCategory() + "");
+            return view;
+        }
+    }
+
+    private static class ViewHolder {
+        TextView mTitle;
+        TextView mCategory;
+        TextView mDatetime;
+        TextView mSubCategory;
     }
 }
