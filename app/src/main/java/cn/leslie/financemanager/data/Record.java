@@ -25,9 +25,6 @@ public class Record extends Model implements Comparable<Record> {
     @JsonProperty("created")
     private long mCreated;
 
-    @JsonProperty("updated")
-    private long mUpdated;
-
     @JsonProperty("category")
     private long mCategory;
 
@@ -66,20 +63,6 @@ public class Record extends Model implements Comparable<Record> {
      */
     public void setCreated(long created) {
         mCreated = created;
-    }
-
-    /**
-     * @return the updated.
-     */
-    public long getUpdated() {
-        return mUpdated;
-    }
-
-    /**
-     * set the updated.
-     */
-    public void setUpdated(long updated) {
-        mUpdated = updated;
     }
 
     /**
@@ -140,7 +123,7 @@ public class Record extends Model implements Comparable<Record> {
 
     @Override
     public int compareTo(Record another) {
-        return (int) (another.getCreated() - getCreated());
+        return (int) ((another.getCreated() - getCreated()) / 1000);
     }
 
     @Override

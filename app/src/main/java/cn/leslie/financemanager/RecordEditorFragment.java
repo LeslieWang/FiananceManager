@@ -187,10 +187,7 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
         }
 
         record.setAmount(Float.parseFloat(amount));
-        if (isCreate()) {
-            record.setCreated(mRecordTime.getTimeInMillis());
-        }
-        record.setUpdated(mRecordTime.getTimeInMillis());
+        record.setCreated(mRecordTime.getTimeInMillis());
         record.setCategory(mSelectedCateId);
         record.setSubCategory(mSelectedSubCateId);
         record.setType(getType());
@@ -320,20 +317,18 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
     }
 
     private void showDatePicker() {
-        Calendar now = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int monthOfYear,int dayOfMonth) {
                 mRecordTime.set(year, monthOfYear, dayOfMonth);
                 onRecordTimeUpdated();
             }
-        }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+        }, mRecordTime.get(Calendar.YEAR), mRecordTime.get(Calendar.MONTH), mRecordTime.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.setTitle(R.string.set_date);
         datePickerDialog.show();
     }
 
     private void showTimePicker() {
-        Calendar now = Calendar.getInstance();
         TimePickerDialog datePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
@@ -341,7 +336,7 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
                 mRecordTime.set(Calendar.MINUTE, minute);
                 onRecordTimeUpdated();
             }
-        }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true);
+        }, mRecordTime.get(Calendar.HOUR_OF_DAY), mRecordTime.get(Calendar.MINUTE), true);
         datePickerDialog.setTitle(R.string.set_time);
         datePickerDialog.show();
     }
