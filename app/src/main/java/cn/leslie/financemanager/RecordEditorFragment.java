@@ -86,8 +86,7 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
         }
 
         if (id == 0) {
-            mRecord = new Record();
-            mRecord.setId(0);
+            mRecord = null;
         } else {
             mRecord = DataManager.getInstance().getRecordById(id);
             mRecordTime = Calendar.getInstance();
@@ -127,7 +126,7 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
         mTime.setOnClickListener(this);
 
         if (!isCreate()) {
-            onRecordUpdated();
+            loadRecord();
         } else {
             List<Category> categories = DataManager.getInstance().getCategories();
             if (categories.size() > 0) {
@@ -153,7 +152,7 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
     }
 
     private boolean isCreate() {
-        return mRecord == null || mRecord.getId() == 0;
+        return mRecord == null;
     }
 
     private int getType() {
@@ -180,21 +179,28 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
             return;
         }
 
-        mRecord.setAmount(Float.parseFloat(amount));
+        Record record;
         if (isCreate()) {
-            mRecord.setCreated(mRecordTime.getTimeInMillis());
+            record = new Record();
+        } else {
+            record = mRecord;
         }
-        mRecord.setUpdated(mRecordTime.getTimeInMillis());
-        mRecord.setCategory(mSelectedCateId);
-        mRecord.setSubCategory(mSelectedSubCateId);
-        mRecord.setType(getType());
-        mRecord.setPerson(getPerson());
+
+        record.setAmount(Float.parseFloat(amount));
+        if (isCreate()) {
+            record.setCreated(mRecordTime.getTimeInMillis());
+        }
+        record.setUpdated(mRecordTime.getTimeInMillis());
+        record.setCategory(mSelectedCateId);
+        record.setSubCategory(mSelectedSubCateId);
+        record.setType(getType());
+        record.setPerson(getPerson());
 
         boolean res;
         if (isCreate()) {
-            res = DataManager.getInstance().addRecord(mRecord);
+            res = DataManager.getInstance().addRecord(record);
         } else {
-            res = DataManager.getInstance().updateRecord(mRecord);
+            res = DataManager.getInstance().updateRecord(record);
         }
 
         if (res) {
@@ -211,7 +217,7 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    private void onRecordUpdated() {
+    private void loadRecord() {
         if (mRecord == null) {
             return;
         }

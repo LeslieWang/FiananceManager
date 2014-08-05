@@ -131,10 +131,10 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
             String typeStr = record.getType() == Record.TYPE_INCOME
                     ? getString(R.string.income) : getString(R.string.outcome);
             viewHolder.mTitle.setText(typeStr + " : " + record.getAmount());
-            viewHolder.mCategory.setText(record.getCategory() +
+            viewHolder.mCategory.setText(
                     DataManager.getInstance().getCategoryById(record.getCategory()).getName());
             viewHolder.mDatetime.setText(record.getCreatedTimeText(MainActivity.this));
-            viewHolder.mSubCategory.setText(record.getSubCategory() +
+            viewHolder.mSubCategory.setText(
                     DataManager.getInstance().getSubCategoryById(record.getSubCategory()).getName());
             return view;
         }
