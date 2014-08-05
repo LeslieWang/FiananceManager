@@ -22,6 +22,10 @@
             android:name=".EditRecordActivity"
             android:label="@string/title_activity_edit_record" >
         </activity>
+        <activity
+            android:name=".CategoryManageActivity"
+            android:label="@string/title_activity_category_manage" >
+        </activity>
     </application>
 
 </manifest>

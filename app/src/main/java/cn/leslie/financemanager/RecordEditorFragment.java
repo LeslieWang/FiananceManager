@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -19,9 +22,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.List;
 
+import cn.leslie.financemanager.data.Category;
 import cn.leslie.financemanager.data.DataManager;
 import cn.leslie.financemanager.data.Record;
+import cn.leslie.financemanager.data.SubCategory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,8 +40,6 @@ import cn.leslie.financemanager.data.Record;
  */
 public class RecordEditorFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_RECORD_ID = "record_id";
-    private static final String[] CATE_ITEMS = new String[]{"Cate1", "Cate2", "Cate3", "Cate4"};
-    private static final String[] SUB_CATE_ITEMS = new String[]{"SubCate1", "SubCate2", "SubCate3", "SubCate4"};
 
     private Button mCategory;
     private Button mSubCategory;
@@ -49,10 +53,10 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
     private EditText mAmount;
 
     private Calendar mRecordTime;
-
     private Record mRecord;
-
     private OnSaveListener mListener;
+    private long mSelectedCateId = 0;
+    private long mSelectedSubCateId = 0;
 
     /**
      * Use this factory method to create a new instance of
@@ -124,6 +128,17 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
 
         if (!isCreate()) {
             onRecordUpdated();
+        } else {
+            List<Category> categories = DataManager.getInstance().getCategories();
+            if (categories.size() > 0) {
+                mSelectedCateId = categories.get(0).getId();
+                List<SubCategory> subCategories =
+                        DataManager.getInstance().getSubCategories(mSelectedCateId);
+                if (subCategories.size() > 0) {
+                    mSelectedSubCateId = subCategories.get(0).getId();
+                }
+            }
+            onCategoryUpdated();
         }
         return res;
     }
@@ -160,11 +175,18 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
     }
 
     private void save() {
-        mRecord.setAmount(Float.parseFloat(mAmount.getText().toString()));
-        mRecord.setCreated(mRecordTime.getTimeInMillis());
+        String amount = mAmount.getText().toString();
+        if (TextUtils.isEmpty(amount) || mSelectedSubCateId == 0 || mSelectedCateId == 0) {
+            return;
+        }
+
+        mRecord.setAmount(Float.parseFloat(amount));
+        if (isCreate()) {
+            mRecord.setCreated(mRecordTime.getTimeInMillis());
+        }
         mRecord.setUpdated(mRecordTime.getTimeInMillis());
-        mRecord.setCategory(1);
-        mRecord.setSubCategory(2);
+        mRecord.setCategory(mSelectedCateId);
+        mRecord.setSubCategory(mSelectedSubCateId);
         mRecord.setType(getType());
         mRecord.setPerson(getPerson());
 
@@ -180,6 +202,10 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
                 mListener.onSave();
             }
             mAmount.setText("");
+
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mAmount.getWindowToken(), 0);
         } else {
             Toast.makeText(getActivity(), R.string.save_record_failed, Toast.LENGTH_LONG).show();
         }
@@ -205,10 +231,26 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
         }
 
         mAmount.setText(mRecord.getAmount() + "");
-        mCategory.setText(mRecord.getCategory() + "");
-        mSubCategory.setText(mRecord.getSubCategory() + "");
+        mSelectedCateId = mRecord.getCategory();
+        mSelectedSubCateId = mRecord.getSubCategory();
 
         onRecordTimeUpdated();
+        onCategoryUpdated();
+    }
+
+    private void onCategoryUpdated() {
+        Category category = DataManager.getInstance().getCategoryById(mSelectedCateId);
+        if (category != null) {
+            mCategory.setText(category.getName());
+        } else {
+            mCategory.setText(R.string.category);
+        }
+        SubCategory subCategory = DataManager.getInstance().getSubCategoryById(mSelectedSubCateId);
+        if (subCategory != null) {
+            mSubCategory.setText(subCategory.getName());
+        } else {
+            mSubCategory.setText(R.string.sub_category);
+        }
     }
 
     private void onRecordTimeUpdated() {
@@ -224,25 +266,50 @@ public class RecordEditorFragment extends Fragment implements View.OnClickListen
     private void showCategoryPicker() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.choose_category);
-        builder.setItems(CATE_ITEMS, new DialogInterface.OnClickListener() {
+
+        final List<Category> categories = DataManager.getInstance().getCategories();
+        final String[] items = new String[categories.size()];
+        for (int i = 0; i < categories.size(); i++) {
+            items[i] = categories.get(i).getName();
+        }
+        builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mCategory.setText(CATE_ITEMS[i]);
+                mCategory.setText(items[i]);
+                mSelectedCateId = categories.get(i).getId();
+                List<SubCategory> subCategories =
+                        DataManager.getInstance().getSubCategories(mSelectedCateId);
+                if (subCategories.size() > 0) {
+                    mSelectedSubCateId = subCategories.get(0).getId();
+                } else {
+                    mSelectedSubCateId = 0;
+                }
+                onCategoryUpdated();
                 showSubCategoryPicker();
             }
         });
+        builder.setCancelable(true);
         builder.create().show();
     }
 
     private void showSubCategoryPicker() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.choose_sub_category);
-        builder.setItems(SUB_CATE_ITEMS, new DialogInterface.OnClickListener() {
+
+        final List<SubCategory> subCategories = DataManager.getInstance().getSubCategories(mSelectedCateId);
+        final String[] items = new String[subCategories.size()];
+        for (int i = 0; i < subCategories.size(); i++) {
+            items[i] = subCategories.get(i).getName();
+        }
+        builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mSubCategory.setText(SUB_CATE_ITEMS[i]);
+                mSubCategory.setText(items[i]);
+                mSelectedSubCateId = subCategories.get(i).getId();
+                onCategoryUpdated();
             }
         });
+        builder.setCancelable(true);
         builder.create().show();
     }
 

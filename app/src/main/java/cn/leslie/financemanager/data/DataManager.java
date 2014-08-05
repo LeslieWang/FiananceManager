@@ -101,9 +101,73 @@ public class DataManager {
         return mDataSets.get(Record.class).deleteItem(record);
     }
 
+    /**
+     * @return all the categories.
+     */
+    public List<Category> getCategories() {
+        List<Category> list = getListWithFilter(mDataSets.get(Category.class), null);
+        Collections.sort(list);
+        return list;
+    }
+
+    public Category getCategoryById(Long id) {
+        return (Category) mDataSets.get(Category.class).getById(id);
+    }
+
+    public boolean addCategory(String name) {
+        Category cate = new Category();
+        cate.setName(name);
+        cate.setOrder(mDataSets.get(Category.class).mData.size());
+        return mDataSets.get(Category.class).addItem(cate);
+    }
+
+    public boolean updateCategory(Category cate) {
+        return mDataSets.get(Category.class).updateItem(cate);
+    }
+
+    public boolean deleteCategory(Category cate) {
+        return mDataSets.get(Category.class).deleteItem(cate);
+    }
+
+    /**
+     * @return all the sub categories.
+     */
+    public List<SubCategory> getSubCategories(final long id) {
+        List<SubCategory> list = getListWithFilter(mDataSets.get(SubCategory.class), new Filter() {
+            @Override
+            public boolean isMatch(Model model) {
+                return id == ((SubCategory) model).getCategoryId();
+            }
+        });
+        Collections.sort(list);
+        return list;
+    }
+
+    public SubCategory getSubCategoryById(Long id) {
+        return (SubCategory) mDataSets.get(SubCategory.class).getById(id);
+    }
+
+    public boolean addSubCategory(long cateId, String name) {
+        SubCategory subCate = new SubCategory();
+        subCate.setCategoryId(cateId);
+        subCate.setName(name);
+        subCate.setOrder(mDataSets.get(SubCategory.class).mData.size());
+        return mDataSets.get(SubCategory.class).addItem(subCate);
+    }
+
+    public boolean updateSubCategory(SubCategory subCate) {
+        return mDataSets.get(SubCategory.class).updateItem(subCate);
+    }
+
+    public boolean deleteSubCategory(SubCategory subCate) {
+        return mDataSets.get(SubCategory.class).deleteItem(subCate);
+    }
+
     private void initDataSets() {
         mDataSets = new HashMap<Class, DataSet>();
         mDataSets.put(Record.class, new DataSet<Record>(Record.class));
+        mDataSets.put(Category.class, new DataSet<Category>(Category.class));
+        mDataSets.put(SubCategory.class, new DataSet<SubCategory>(SubCategory.class));
 
         // XXX: dataset loading is to read the content from local file,
         // so it will block the calling thread a while

@@ -20,5 +20,9 @@
     <string name="date_and_time_template">yyyy-MM-dd HH:mm</string>
     <string name="title_activity_edit_record">修改记录</string>
     <string name="save_record_failed">保存失败</string>
+    <string name="title_activity_category_manage">管理类别</string>
+    <string name="add_cate">添加类别</string>
+    <string name="add_sub_cate">添加子类别</string>
+    <string name="action_manage_cate">管理类别</string>
 
 </resources>

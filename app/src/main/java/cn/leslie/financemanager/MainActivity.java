@@ -59,6 +59,10 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
         if (fragment.onOptionsItemSelected(item)) {
             return true;
         }
+        if (item.getItemId() == R.id.action_manage_cate) {
+            CategoryManageActivity.show(this);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -127,9 +131,11 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
             String typeStr = record.getType() == Record.TYPE_INCOME
                     ? getString(R.string.income) : getString(R.string.outcome);
             viewHolder.mTitle.setText(typeStr + " : " + record.getAmount());
-            viewHolder.mCategory.setText(record.getCategory() + "");
+            viewHolder.mCategory.setText(record.getCategory() +
+                    DataManager.getInstance().getCategoryById(record.getCategory()).getName());
             viewHolder.mDatetime.setText(record.getCreatedTimeText(MainActivity.this));
-            viewHolder.mSubCategory.setText(record.getSubCategory() + "");
+            viewHolder.mSubCategory.setText(record.getSubCategory() +
+                    DataManager.getInstance().getSubCategoryById(record.getSubCategory()).getName());
             return view;
         }
     }
