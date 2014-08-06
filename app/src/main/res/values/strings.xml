@@ -24,5 +24,13 @@
     <string name="add_cate">添加类别</string>
     <string name="add_sub_cate">添加子类别</string>
     <string name="action_manage_cate">管理类别</string>
+    <string name="menu_delete">删除</string>
+    <string name="menu_edit">修改</string>
+    <string name="warning_delete">严肃点</string>
+    <string name="confirm_delete_record">删了就恢复不了的哈，稳重点哈，亲。</string>
+    <string name="confirm_delete">大力删</string>
+    <string name="cancel_delete">算咯</string>
+    <string name="something_wrong">哦豁，出问题了耶。</string>
+    <string name="operation_success">你赢了</string>
 
 </resources>

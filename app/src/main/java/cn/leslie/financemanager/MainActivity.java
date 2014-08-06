@@ -1,17 +1,21 @@
 package cn.leslie.financemanager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.fortysevendeg.swipelistview.SwipeListView;
 
 import java.util.List;
 
@@ -21,6 +25,7 @@ import cn.leslie.financemanager.data.Record;
 
 public class MainActivity extends Activity implements RecordEditorFragment.OnSaveListener {
     private RecordAdapter mRecordAdapter;
+    private SwipeListView mSwipeListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +39,9 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
                     .commit();
         }
 
-        ListView listRecord = (ListView) findViewById(R.id.list_record);
+        mSwipeListView = (SwipeListView) findViewById(R.id.list_record);
         mRecordAdapter = new RecordAdapter(DataManager.getInstance().getRecords());
-        listRecord.setAdapter(mRecordAdapter);
-        listRecord.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                EditRecordActivity.show(MainActivity.this, id);
-            }
-        });
+        mSwipeListView.setAdapter(mRecordAdapter);
     }
 
     @Override
@@ -109,7 +108,7 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View view;
             ViewHolder viewHolder;
 
@@ -123,19 +122,55 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
                 viewHolder.mTitle = (TextView) view.findViewById(R.id.text_title);
                 viewHolder.mCategory = (TextView) view.findViewById(R.id.text_category);
                 viewHolder.mDatetime = (TextView) view.findViewById(R.id.text_datetime);
-                viewHolder.mSubCategory = (TextView) view.findViewById(R.id.text_sub_category);
+                viewHolder.mPerson = (TextView) view.findViewById(R.id.text_person);
+                viewHolder.mEdit = (ImageButton) view.findViewById(R.id.btn_edit);
+                viewHolder.mDelete = (ImageButton) view.findViewById(R.id.btn_delete);
                 view.setTag(viewHolder);
             }
 
-            Record record = (Record) getItem(position);
-            String typeStr = record.getType() == Record.TYPE_INCOME
-                    ? getString(R.string.income) : getString(R.string.outcome);
-            viewHolder.mTitle.setText(typeStr + " : " + record.getAmount());
-            viewHolder.mCategory.setText(
-                    DataManager.getInstance().getCategoryById(record.getCategory()).getName());
+            final Record record = (Record) getItem(position);
+            viewHolder.mTitle.setText(Utility.toRecordTypeStr(
+                    MainActivity.this, record.getType()) + " : " + record.getAmount());
+            viewHolder.mCategory.setText(Utility.toCategoryStr(record.getCategory())
+                    + ":" + Utility.toSubCategoryStr(record.getSubCategory()));
             viewHolder.mDatetime.setText(record.getCreatedTimeText(MainActivity.this));
-            viewHolder.mSubCategory.setText(
-                    DataManager.getInstance().getSubCategoryById(record.getSubCategory()).getName());
+            viewHolder.mPerson.setText(Utility.toPersonStr(MainActivity.this, record.getPerson()));
+            viewHolder.mEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mSwipeListView.closeOpenedItems();
+                    EditRecordActivity.show(MainActivity.this, getItemId(position));
+                }
+            });
+            viewHolder.mDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle(R.string.warning_delete);
+                    builder.setCancelable(true);
+                    builder.setNegativeButton(R.string.cancel_delete, null);
+                    builder.setPositiveButton(R.string.confirm_delete, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (DataManager.getInstance().deleteRecord(record)) {
+                                mSwipeListView.closeOpenedItems();
+                                updateRecordList();
+                                Toast.makeText(MainActivity.this,
+                                        R.string.operation_success, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this,
+                                        R.string.something_wrong, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
+                    TextView textView = new TextView(MainActivity.this);
+                    textView.setPadding(20, 20, 20, 20);
+                    textView.setText(R.string.confirm_delete_record);
+                    builder.setView(textView);
+                    builder.show();
+                }
+            });
             return view;
         }
     }
@@ -144,6 +179,8 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
         TextView mTitle;
         TextView mCategory;
         TextView mDatetime;
-        TextView mSubCategory;
+        TextView mPerson;
+        ImageButton mEdit;
+        ImageButton mDelete;
     }
 }

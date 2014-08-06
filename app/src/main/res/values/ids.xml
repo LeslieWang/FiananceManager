@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Copyright (c) 2014 Palm4fun Corp. Ltd. All rights reserved. -->
+
+<resources>
+    <item type="id" name="swipe_front" />
+    <item type="id" name="swipe_back" />
+</resources>

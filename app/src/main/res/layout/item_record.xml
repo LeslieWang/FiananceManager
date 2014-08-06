@@ -1,45 +1,87 @@
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/default_widget_padding"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     tools:context=".MainActivity">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/swipe_back"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/text_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:textSize="20sp"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingRight="5dp"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/text_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textSize="20sp"/>
-    </RelativeLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"/>
 
-    <RelativeLayout
+        <ImageButton
+            android:id="@+id/btn_edit"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@null"
+            android:background="@drawable/bg_button_default"
+            android:scaleType="fitXY"
+            android:src="@android:drawable/ic_menu_edit"/>
+
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:background="@drawable/bg_button_default"
+            android:src="@android:drawable/ic_menu_delete"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/swipe_front"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/text_datetime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:textSize="20sp"/>
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_widget_padding"
+        android:background="@android:color/holo_orange_light"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text_sub_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textSize="20sp"/>
-    </RelativeLayout>
-</LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/text_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/text_datetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/text_person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+    </LinearLayout>
+</FrameLayout>
