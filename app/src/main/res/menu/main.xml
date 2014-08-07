@@ -8,7 +8,7 @@
         android:showAsAction="always" />
     <item android:id="@+id/action_manage_cate"
         android:title="@string/action_manage_cate"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@android:drawable/ic_menu_manage"
         android:orderInCategory="100"
         android:showAsAction="always" />
 </menu>

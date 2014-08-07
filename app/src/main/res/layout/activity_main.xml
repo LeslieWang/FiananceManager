@@ -20,7 +20,7 @@
         swipe:swipeBackView="@id/swipe_back"
         swipe:swipeFrontView="@id/swipe_front"
         swipe:swipeMode="left"
-        swipe:swipeOffsetLeft="220dp"
+        swipe:swipeOffsetLeft="250dp"
         android:divider="@null"
         tools:listitem="@layout/item_record" />
 </LinearLayout>

@@ -24,8 +24,8 @@
         <ImageButton
             android:id="@+id/btn_edit"
             android:padding="@dimen/list_item_padding"
-            android:layout_width="@dimen/record_item_size"
-            android:layout_height="@dimen/record_item_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@null"
             android:background="@drawable/bg_button_default"
             android:scaleType="fitXY"
@@ -33,10 +33,9 @@
 
         <ImageButton
             android:id="@+id/btn_delete"
-            android:layout_marginLeft="@dimen/list_item_padding"
             android:padding="@dimen/list_item_padding"
-            android:layout_width="@dimen/record_item_size"
-            android:layout_height="@dimen/record_item_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@null"
             android:scaleType="fitXY"
             android:background="@drawable/bg_button_default"
