@@ -1,9 +1,7 @@
 package cn.leslie.financemanager;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
 
@@ -145,30 +142,17 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
             viewHolder.mDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle(R.string.warning_delete);
-                    builder.setCancelable(true);
-                    builder.setNegativeButton(R.string.cancel_delete, null);
-                    builder.setPositiveButton(R.string.confirm_delete, new DialogInterface.OnClickListener() {
+                    Utility.showDeleteConfirmDialog(MainActivity.this, new Utility.OnDeleteConfirmListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                        public boolean onDelete() {
                             if (DataManager.getInstance().deleteRecord(record)) {
                                 mSwipeListView.closeOpenedItems();
                                 updateRecordList();
-                                Toast.makeText(MainActivity.this,
-                                        R.string.operation_success, Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(MainActivity.this,
-                                        R.string.something_wrong, Toast.LENGTH_LONG).show();
+                                return true;
                             }
+                            return false;
                         }
                     });
-
-                    TextView textView = new TextView(MainActivity.this);
-                    textView.setPadding(20, 20, 20, 20);
-                    textView.setText(R.string.confirm_delete_record);
-                    builder.setView(textView);
-                    builder.show();
                 }
             });
             return view;

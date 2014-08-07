@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.leslie.financemanager.data.DataManager;
 import cn.leslie.financemanager.data.Record;
@@ -42,6 +44,32 @@ public class Utility {
         return null;
     }
 
+    public static void showDeleteConfirmDialog(final Context context,
+                                               final OnDeleteConfirmListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.warning_delete);
+        builder.setCancelable(true);
+        builder.setNegativeButton(R.string.cancel_delete, null);
+        builder.setPositiveButton(R.string.confirm_delete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (listener.onDelete()) {
+                    Toast.makeText(context,
+                            R.string.operation_success, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context,
+                            R.string.something_wrong, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        TextView textView = new TextView(context);
+        textView.setPadding(20, 20, 20, 20);
+        textView.setText(R.string.confirm_delete_record);
+        builder.setView(textView);
+        builder.show();
+    }
+
     public static void showEditorDialog(Context context, String origName,
                                   final OnEditorDialogConfirmListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -65,5 +93,9 @@ public class Utility {
 
     public interface OnEditorDialogConfirmListener {
         public void onConfirm(String name);
+    }
+
+    public interface OnDeleteConfirmListener {
+        public boolean onDelete();
     }
 }

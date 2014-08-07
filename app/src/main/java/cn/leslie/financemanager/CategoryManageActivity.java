@@ -215,6 +215,35 @@ public class CategoryManageActivity extends Activity {
                     showEditCategoryDialog(category);
                 }
             });
+            view.findViewById(R.id.btn_delete).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utility.showDeleteConfirmDialog(CategoryManageActivity.this,
+                            new Utility.OnDeleteConfirmListener() {
+                                @Override
+                                public boolean onDelete() {
+                                    DataManager data = DataManager.getInstance();
+                                    if (data.getRecordsByCategory(category.getId()).size() > 0 ||
+                                            data.getSubCategories(category.getId()).size() > 0) {
+                                        return false;
+                                    }
+                                    if (data.deleteCategory(category)) {
+                                        if (mCurrentCatePos == data.getCategories().size()) {
+                                            if (mCurrentCatePos == 0) {
+                                                mCurrentCatePos = INVALID_POS;
+                                            } else {
+                                                mCurrentCatePos--;
+                                            }
+                                        }
+                                        updateCategoryList();
+                                        updateSubCategoryList();
+                                        return true;
+                                    }
+                                    return false;
+                                }
+                            });
+                }
+            });
             return view;
         }
     }
@@ -262,6 +291,26 @@ public class CategoryManageActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     showEditSubCategoryDialog(subCategory);
+                }
+            });
+            view.findViewById(R.id.btn_delete).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utility.showDeleteConfirmDialog(CategoryManageActivity.this,
+                            new Utility.OnDeleteConfirmListener() {
+                        @Override
+                        public boolean onDelete() {
+                            if (DataManager.getInstance().getRecordsBySubCategory(
+                                    subCategory.getId()).size() > 0) {
+                                return false;
+                            }
+                            if (DataManager.getInstance().deleteSubCategory(subCategory)) {
+                                updateSubCategoryList();
+                                return true;
+                            }
+                            return false;
+                        }
+                    });
                 }
             });
 
