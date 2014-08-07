@@ -5,8 +5,10 @@
     <dimen name="default_widget_padding">15dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="default_widget_padding_small">8dp</dimen>
+    <dimen name="small_widget_padding">8dp</dimen>
     <dimen name="cate_item_height">40dp</dimen>
-    <dimen name="cate_item_padding">5dp</dimen>
+    <dimen name="record_item_size">50dp</dimen>
+    <dimen name="list_item_padding">5dp</dimen>
+    <dimen name="record_detail_padding">12dp</dimen>
 
 </resources>

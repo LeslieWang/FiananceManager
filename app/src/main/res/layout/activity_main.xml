@@ -16,9 +16,11 @@
         android:id="@+id/list_record"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/small_widget_padding"
         swipe:swipeBackView="@id/swipe_back"
         swipe:swipeFrontView="@id/swipe_front"
         swipe:swipeMode="left"
         swipe:swipeOffsetLeft="220dp"
+        android:divider="@null"
         tools:listitem="@layout/item_record" />
 </LinearLayout>
