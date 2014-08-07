@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.leslie.financemanager.data.DataManager;
@@ -62,11 +61,7 @@ public class Utility {
                 }
             }
         });
-
-        TextView textView = new TextView(context);
-        textView.setPadding(20, 20, 20, 20);
-        textView.setText(R.string.confirm_delete_record);
-        builder.setView(textView);
+        builder.setMessage(R.string.confirm_delete_record);
         builder.show();
     }
 
