@@ -1,9 +1,51 @@
-<TextView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/default_widget_padding_small"
-    android:textSize="18sp"
-    tools:context=".CategoryManageActivity" />
+    android:layout_height="@dimen/cate_item_height">
+
+    <LinearLayout
+        android:id="@+id/swipe_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"/>
+
+        <ImageButton
+            android:id="@+id/btn_edit"
+            android:padding="@dimen/cate_item_padding"
+            android:layout_width="@dimen/cate_item_height"
+            android:layout_height="@dimen/cate_item_height"
+            android:contentDescription="@null"
+            android:background="@drawable/bg_button_default"
+            android:scaleType="fitXY"
+            android:src="@android:drawable/ic_menu_edit"/>
+
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_marginLeft="@dimen/cate_item_padding"
+            android:layout_marginRight="@dimen/cate_item_padding"
+            android:padding="@dimen/cate_item_padding"
+            android:layout_width="@dimen/cate_item_height"
+            android:layout_height="@dimen/cate_item_height"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:background="@drawable/bg_button_default"
+            android:src="@android:drawable/ic_menu_delete"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@id/swipe_front"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/default_widget_padding_small"
+        android:background="@android:color/holo_orange_light"
+        android:textSize="15sp"
+        tools:context=".CategoryManageActivity" />
+</FrameLayout>

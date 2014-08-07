@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
@@ -10,20 +11,29 @@
     tools:context="cn.leslie.financemanager.CategoryManageActivity"
     android:baselineAligned="false">
 
-    <ListView
+    <com.fortysevendeg.swipelistview.SwipeListView
         android:id="@+id/list_cate"
         android:layout_marginRight="@dimen/default_widget_margin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
-        tools:listitem="@layout/item_cate"/>
+        android:background="#33CCCCCC"
+        tools:listitem="@layout/item_cate"
+        swipe:swipeBackView="@id/swipe_back"
+        swipe:swipeFrontView="@id/swipe_front"
+        swipe:swipeMode="left"
+        swipe:swipeOffsetLeft="50dp"/>
 
-    <ListView
+    <com.fortysevendeg.swipelistview.SwipeListView
         android:id="@+id/list_sub_cate"
         android:layout_marginLeft="@dimen/default_widget_margin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
-        android:background="@android:color/holo_orange_light"
-        tools:listitem="@layout/item_cate"/>
+        android:background="#33CCCCCC"
+        tools:listitem="@layout/item_cate"
+        swipe:swipeBackView="@id/swipe_back"
+        swipe:swipeFrontView="@id/swipe_front"
+        swipe:swipeMode="left"
+        swipe:swipeOffsetLeft="50dp"/>
 </LinearLayout>

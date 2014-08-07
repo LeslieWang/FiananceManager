@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".CategoryManageActivity" >
+    <item android:id="@+id/action_add_category"
+        android:title="@string/add_cate"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+    <item android:id="@+id/action_add_sub_category"
+        android:title="@string/add_sub_cate"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+</menu>

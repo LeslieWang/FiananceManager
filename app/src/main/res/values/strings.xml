@@ -23,6 +23,7 @@
     <string name="title_activity_category_manage">管理类别</string>
     <string name="add_cate">添加类别</string>
     <string name="add_sub_cate">添加子类别</string>
+    <string name="input_name">输入名称</string>
     <string name="action_manage_cate">管理类别</string>
     <string name="menu_delete">删除</string>
     <string name="menu_edit">修改</string>

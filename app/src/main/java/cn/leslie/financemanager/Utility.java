@@ -1,6 +1,10 @@
 package cn.leslie.financemanager;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.TextUtils;
+import android.widget.EditText;
 
 import cn.leslie.financemanager.data.DataManager;
 import cn.leslie.financemanager.data.Record;
@@ -36,5 +40,30 @@ public class Utility {
                 return context.getString(R.string.all);
         }
         return null;
+    }
+
+    public static void showEditorDialog(Context context, String origName,
+                                  final OnEditorDialogConfirmListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.input_name);
+        final EditText editText = new EditText(context);
+        if (!TextUtils.isEmpty(origName)) {
+            editText.setText(origName);
+        }
+        editText.setPadding(50, 50, 50, 50);
+        builder.setView(editText);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                listener.onConfirm(editText.getText().toString());
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.setCancelable(true);
+        builder.create().show();
+    }
+
+    public interface OnEditorDialogConfirmListener {
+        public void onConfirm(String name);
     }
 }

@@ -82,6 +82,28 @@ public class DataManager {
         return list;
     }
 
+    public List<Record> getRecordsByCategory(final long cateId) {
+        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
+            @Override
+            public boolean isMatch(Model model) {
+                return ((Record) model).getCategory() == cateId;
+            }
+        });
+        Collections.sort(list);
+        return list;
+    }
+
+    public List<Record> getRecordsBySubCategory(final long subCateId) {
+        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
+            @Override
+            public boolean isMatch(Model model) {
+                return ((Record) model).getSubCategory() == subCateId;
+            }
+        });
+        Collections.sort(list);
+        return list;
+    }
+
     /**
      * @return the record according given id.
      */
