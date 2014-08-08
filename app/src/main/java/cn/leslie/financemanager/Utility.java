@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 import cn.leslie.financemanager.data.DataManager;
 import cn.leslie.financemanager.data.Record;
 
@@ -14,6 +16,8 @@ import cn.leslie.financemanager.data.Record;
  * Helper class to handle some common functions.
  */
 public class Utility {
+    private static final int ONE_DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+
     private Utility() {
         // make it as private
     }
@@ -39,6 +43,24 @@ public class Utility {
                 return context.getString(R.string.male);
             case Record.PERSON_ALL:
                 return context.getString(R.string.all);
+        }
+        return null;
+    }
+
+    public static int calculateDayOffset(long time1, long time2) {
+        long offset = (time1 / ONE_DAY_IN_MILLIS) - (time2 / ONE_DAY_IN_MILLIS);
+        return (int) offset;
+    }
+
+    public static String getRelativeDateName(Context context, long time) {
+        int offset = calculateDayOffset(System.currentTimeMillis(), time);
+        switch (offset) {
+            case 0:
+                return context.getString(R.string.today);
+            case 1:
+                return context.getString(R.string.yesterday);
+            case 2:
+                return context.getString(R.string.before_yesterday);
         }
         return null;
     }

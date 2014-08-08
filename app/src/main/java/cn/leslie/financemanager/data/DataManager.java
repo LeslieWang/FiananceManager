@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.leslie.financemanager.Utility;
+
 /**
  * Utility class to save and update persistent data.
  */
@@ -78,6 +80,18 @@ public class DataManager {
      */
     public List<Record> getRecords() {
         List<Record> list = getListWithFilter(mDataSets.get(Record.class), null);
+        Collections.sort(list);
+        return list;
+    }
+
+    public List<Record> getRecentRecords(final int dayOffset) {
+        final long now = System.currentTimeMillis();
+        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
+            @Override
+            public boolean isMatch(Model model) {
+                return Utility.calculateDayOffset(now,((Record) model).getCreated()) < dayOffset;
+            }
+        });
         Collections.sort(list);
         return list;
     }

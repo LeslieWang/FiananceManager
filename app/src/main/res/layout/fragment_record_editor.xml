@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/income"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_big"
             android:layout_weight="1.0" />
 
         <View
@@ -36,7 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/outcome"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_big"
             android:layout_weight="1.0"
             android:checked="true"/>
     </RadioGroup>
@@ -59,7 +59,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/male"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_big"
             android:layout_weight="1.0" />
 
         <View
@@ -75,7 +75,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/female"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_big"
             android:layout_weight="1.0"
             android:checked="true"/>
 
@@ -92,7 +92,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/all"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_big"
             android:layout_weight="1.0"
             android:checked="true"/>
     </RadioGroup>
@@ -109,7 +109,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/default_widget_margin"
         android:layout_marginRight="@dimen/default_widget_margin"
-        android:layout_marginTop="@dimen/default_widget_margin"
+        android:layout_marginTop="@dimen/default_widget_padding"
+        android:textSize="@dimen/text_size_big"
         android:inputType="numberDecimal"/>
 
     <View
@@ -129,6 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:background="@drawable/bg_button_default"
+            android:textSize="@dimen/text_size_big"
             android:text="@string/category"/>
 
         <View
@@ -142,6 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:background="@drawable/bg_button_default"
+            android:textSize="@dimen/text_size_big"
             android:text="@string/sub_category"/>
     </LinearLayout>
 
@@ -161,6 +164,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:background="@drawable/bg_button_default"
+            android:textSize="@dimen/text_size_big"
             android:text="@string/date"/>
 
         <View
@@ -174,6 +178,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:background="@drawable/bg_button_default"
+            android:textSize="@dimen/text_size_big"
             android:text="@string/time"/>
     </LinearLayout>
 

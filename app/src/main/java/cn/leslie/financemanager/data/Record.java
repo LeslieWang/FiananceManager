@@ -1,6 +1,7 @@
 package cn.leslie.financemanager.data;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -8,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cn.leslie.financemanager.R;
+import cn.leslie.financemanager.Utility;
 
 /**
  * Data object that describes an exposure.
@@ -139,8 +141,15 @@ public class Record extends Model implements Comparable<Record> {
      * @return the updated time text.
      */
     public String getCreatedTimeText(Context context) {
-        SimpleDateFormat format = new SimpleDateFormat(
-                context.getString(R.string.date_and_time_template));
-        return format.format(new Date(getCreated()));
+        String relativeDayName = Utility.getRelativeDateName(context, getCreated());
+        if (TextUtils.isEmpty(relativeDayName)) {
+            SimpleDateFormat format = new SimpleDateFormat(
+                    context.getString(R.string.date_and_time_template));
+            return format.format(new Date(getCreated()));
+        } else {
+            SimpleDateFormat format = new SimpleDateFormat(
+                    context.getString(R.string.time_template));
+            return relativeDayName + " " + format.format(new Date(getCreated()));
+        }
     }
 }

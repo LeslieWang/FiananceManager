@@ -21,6 +21,8 @@ import cn.leslie.financemanager.data.Record;
 
 
 public class MainActivity extends Activity implements RecordEditorFragment.OnSaveListener {
+    private static final int MAX_DISPLAY_DAY_OFFSET = 3; // display recent 3 days records.
+
     private RecordAdapter mRecordAdapter;
     private SwipeListView mSwipeListView;
 
@@ -37,7 +39,8 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
         }
 
         mSwipeListView = (SwipeListView) findViewById(R.id.list_record);
-        mRecordAdapter = new RecordAdapter(DataManager.getInstance().getRecords());
+        mRecordAdapter = new RecordAdapter();
+        updateRecordList();
         mSwipeListView.setAdapter(mRecordAdapter);
     }
 
@@ -74,15 +77,11 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
     }
 
     private void updateRecordList() {
-        mRecordAdapter.setRecords(DataManager.getInstance().getRecords());
+        mRecordAdapter.setRecords(DataManager.getInstance().getRecentRecords(MAX_DISPLAY_DAY_OFFSET));
     }
 
     private class RecordAdapter extends BaseAdapter {
         private List<Record> mRecords;
-
-        RecordAdapter(List<Record> records) {
-            setRecords(records);
-        }
 
         public void setRecords(List<Record> records) {
             mRecords = records;
