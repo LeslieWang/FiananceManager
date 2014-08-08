@@ -17,10 +17,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
-        android:background="#33CCCCCC"
         tools:listitem="@layout/item_cate"
         swipe:swipeBackView="@id/swipe_back"
         swipe:swipeFrontView="@id/swipe_front"
+        android:divider="@null"
         swipe:swipeMode="left"
         swipe:swipeOffsetLeft="50dp"/>
 
@@ -30,10 +30,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
-        android:background="#33CCCCCC"
         tools:listitem="@layout/item_cate"
         swipe:swipeBackView="@id/swipe_back"
         swipe:swipeFrontView="@id/swipe_front"
+        android:divider="@null"
         swipe:swipeMode="left"
         swipe:swipeOffsetLeft="50dp"/>
 </LinearLayout>

@@ -1,5 +1,6 @@
 package cn.leslie.financemanager;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,6 +56,11 @@ public class CategoryManageActivity extends Activity {
         mSubCategoryAdapter = new SubCategoryAdapter(
                 DataManager.getInstance().getSubCategories(getCurrentCateId()));
         mSubCategoryList.setAdapter(mSubCategoryAdapter);
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -66,42 +72,46 @@ public class CategoryManageActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_add_category) {
-            Utility.showEditorDialog(this, null, new Utility.OnEditorDialogConfirmListener() {
-                @Override
-                public void onConfirm(String name) {
-                    if (!TextUtils.isEmpty(name)) {
-                        if (DataManager.getInstance().addCategory(name)) {
-                            updateCategoryList();
-                        }
-                    }
-                }
-            });
-            return true;
-        } else if (item.getItemId() == R.id.action_add_sub_category) {
-            final long cateId = getCurrentCateId();
-            if (cateId > 0) {
+        switch (item.getItemId()) {
+            case R.id.action_add_category:
                 Utility.showEditorDialog(this, null, new Utility.OnEditorDialogConfirmListener() {
                     @Override
                     public void onConfirm(String name) {
                         if (!TextUtils.isEmpty(name)) {
-                            if (DataManager.getInstance().addSubCategory(cateId, name)) {
-                                updateSubCategoryList();
+                            if (DataManager.getInstance().addCategory(name)) {
+                                updateCategoryList();
                             }
                         }
                     }
                 });
                 return true;
-            } else {
-                return false;
-            }
+            case R.id.action_add_sub_category:
+                final long cateId = getCurrentCateId();
+                if (cateId > 0) {
+                    Utility.showEditorDialog(this, null, new Utility.OnEditorDialogConfirmListener() {
+                        @Override
+                        public void onConfirm(String name) {
+                            if (!TextUtils.isEmpty(name)) {
+                                if (DataManager.getInstance().addSubCategory(cateId, name)) {
+                                    updateSubCategoryList();
+                                }
+                            }
+                        }
+                    });
+                    return true;
+                } else {
+                    return false;
+                }
+            case android.R.id.home:
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void updateCategoryBackground(View listItem, boolean isCurrent) {
-        listItem.findViewById(R.id.swipe_front).setBackgroundColor(getResources().getColor(
-                isCurrent ? android.R.color.holo_blue_dark : android.R.color.holo_orange_light));
+        listItem.findViewById(R.id.swipe_front).setBackgroundResource(
+                isCurrent ? R.drawable.bg_list_item_selected : R.drawable.bg_list_item_default);
     }
 
     private void selectCategory(int pos) {

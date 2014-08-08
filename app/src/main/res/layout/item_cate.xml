@@ -2,7 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/cate_item_height">
+    android:layout_height="@dimen/cate_item_height"
+    android:paddingTop="2dp">
 
     <LinearLayout
         android:id="@+id/swipe_back"
@@ -44,8 +45,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:gravity="center_vertical"
         android:padding="@dimen/small_widget_padding"
-        android:background="@android:color/holo_orange_light"
+        android:background="@drawable/bg_list_item_default"
         android:textSize="15sp"
         tools:context=".CategoryManageActivity" />
 </FrameLayout>
