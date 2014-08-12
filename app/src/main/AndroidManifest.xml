@@ -26,6 +26,10 @@
             android:name=".CategoryManageActivity"
             android:label="@string/title_activity_category_manage" >
         </activity>
+        <activity
+            android:name=".StatisticsTabActivity"
+            android:label="@string/title_activity_statistics" >
+        </activity>
     </application>
 
 </manifest>

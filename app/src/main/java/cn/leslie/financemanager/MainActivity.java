@@ -61,6 +61,9 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
         if (item.getItemId() == R.id.action_manage_cate) {
             CategoryManageActivity.show(this);
             return true;
+        } else if (item.getItemId() == R.id.action_statistics) {
+            StatisticsTabActivity.show(this);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

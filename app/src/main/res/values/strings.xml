@@ -7,7 +7,7 @@
     <string name="outcome">支出</string>
     <string name="male">升升</string>
     <string name="female">梅梅</string>
-    <string name="all">小俩口</string>
+    <string name="person_all">小俩口</string>
     <string name="hint_amount">请输入金额</string>
     <string name="category">类别</string>
     <string name="sub_category">子类别</string>
@@ -26,6 +26,7 @@
     <string name="add_sub_cate">添加子类别</string>
     <string name="input_name">输入名称</string>
     <string name="action_manage_cate">管理类别</string>
+    <string name="action_statistics">数据统计</string>
     <string name="menu_delete">删除</string>
     <string name="menu_edit">修改</string>
     <string name="warning_delete">严肃点</string>
@@ -37,5 +38,9 @@
     <string name="today">今天</string>
     <string name="yesterday">昨天</string>
     <string name="before_yesterday">前天</string>
-
+    <string name="title_activity_statistics">数据统计</string>
+    <string name="current_week">本周</string>
+    <string name="current_month">本月</string>
+    <string name="current_year">本年</string>
+    <string name="statistics_all">所有</string>
 </resources>

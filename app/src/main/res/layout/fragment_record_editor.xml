@@ -91,7 +91,7 @@
             android:paddingTop="@dimen/default_widget_padding"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/all"
+            android:text="@string/person_all"
             android:textSize="@dimen/text_size_big"
             android:layout_weight="1.0"
             android:checked="true"/>

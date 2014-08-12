@@ -7,8 +7,6 @@ import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.Calendar;
-
 import cn.leslie.financemanager.data.DataManager;
 import cn.leslie.financemanager.data.Record;
 
@@ -42,7 +40,7 @@ public class Utility {
             case Record.PERSON_MALE:
                 return context.getString(R.string.male);
             case Record.PERSON_ALL:
-                return context.getString(R.string.all);
+                return context.getString(R.string.person_all);
         }
         return null;
     }

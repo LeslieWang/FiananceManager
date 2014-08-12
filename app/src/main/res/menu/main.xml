@@ -11,4 +11,9 @@
         android:icon="@android:drawable/ic_menu_manage"
         android:orderInCategory="100"
         android:showAsAction="always" />
+    <item android:id="@+id/action_statistics"
+        android:title="@string/action_statistics"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:orderInCategory="100"
+        android:showAsAction="always" />
 </menu>
