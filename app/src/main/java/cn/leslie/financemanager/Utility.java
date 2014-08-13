@@ -7,6 +7,12 @@ import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import cn.leslie.financemanager.data.Category;
 import cn.leslie.financemanager.data.DataManager;
 import cn.leslie.financemanager.data.Record;
 
@@ -15,6 +21,7 @@ import cn.leslie.financemanager.data.Record;
  */
 public class Utility {
     private static final int ONE_DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+    private static final float THRESHOLD_NOT_DISPLAY = 0.1f;
 
     private Utility() {
         // make it as private
@@ -112,5 +119,50 @@ public class Utility {
 
     public interface OnDeleteConfirmListener {
         public boolean onDelete();
+    }
+
+    public static Map<String, Float> calculateAmountByCategory(
+            Context context, List<Record> records) {
+        HashMap<String, Float> res = new HashMap<String, Float>();
+
+        if (records != null && records.size() > 0) {
+            float total = 0f;
+            for (Record record : records) {
+                if (record.getCategory() != Category.FIXED_OUTCOME_INCOME) {
+                    total += record.getAmount();
+                    String name = getCategoryName(record);
+                    if (res.containsKey(name)) {
+                        res.put(name, res.get(name) + record.getAmount());
+                    } else {
+                        res.put(name, record.getAmount());
+                    }
+                }
+            }
+
+            float threshold = total * THRESHOLD_NOT_DISPLAY;
+            List<String> list = new ArrayList<String>(res.keySet());
+            float otherAmount = 0f;
+            for (String name : list) {
+                float amount = res.get(name);
+                if (amount < threshold) {
+                    otherAmount += amount;
+                    res.remove(name);
+                }
+            }
+            res.put(context.getString(R.string.statistics_others_portion), otherAmount);
+        }
+        return res;
+    }
+
+    private static String getCategoryName(Record record) {
+        if (record == null) {
+            return "";
+        }
+        Category category = DataManager.getInstance().getCategoryById(record.getCategory());
+        if (category == null) {
+            return "";
+        } else {
+            return category.getName();
+        }
     }
 }

@@ -42,11 +42,14 @@
     <color name="pastel_3">#D9B8A2</color>
     <color name="pastel_4">#BF8686</color>
     <color name="pastel_5">#B33050</color>
-    
-    <color name="vordiplom_1">#C0FF8C</color>
+
+    <color name="vordiplom_1">#80FF8C</color>
     <color name="vordiplom_2">#FFF78C</color>
     <color name="vordiplom_3">#FFD08C</color>
     <color name="vordiplom_4">#8CEAFF</color>
-    <color name="vordiplom_5">#FF8C9D</color>
+    <color name="vordiplom_5">#B3B3FF</color>
+    <color name="vordiplom_6">#94D4D4</color>
+    <color name="vordiplom_7">#F5C2D1</color>
+    <color name="vordiplom_8">#FE9577</color>
     
 </resources>

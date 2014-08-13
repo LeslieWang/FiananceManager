@@ -44,7 +44,7 @@ public class ColorTemplate {
     };
     public static final int[] VORDIPLOM_COLORS = {
             R.color.vordiplom_1, R.color.vordiplom_2, R.color.vordiplom_3, R.color.vordiplom_4,
-            R.color.vordiplom_5
+            R.color.vordiplom_5, R.color.vordiplom_6, R.color.vordiplom_7, R.color.vordiplom_8
     };
 
     /** an arraylist of color arrays (one color array per dataset) */

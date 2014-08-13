@@ -13,6 +13,7 @@ import org.codehaus.jackson.map.type.CollectionType;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +81,58 @@ public class DataManager {
      */
     public List<Record> getRecords() {
         List<Record> list = getListWithFilter(mDataSets.get(Record.class), null);
+        Collections.sort(list);
+        return list;
+    }
+
+    public List<Record> getRecordsOfCurrentWeek() {
+        Calendar now = Calendar.getInstance();
+        final int curWeek = now.get(Calendar.WEEK_OF_YEAR);
+        final int curYear = now.get(Calendar.YEAR);
+        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
+            @Override
+            public boolean isMatch(Model model) {
+                Calendar data = Calendar.getInstance();
+                data.setTimeInMillis(((Record) model).getCreated());
+                int week = data.get(Calendar.WEEK_OF_YEAR);
+                int year = data.get(Calendar.YEAR);
+                return curWeek == week && curYear == year;
+            }
+        });
+        Collections.sort(list);
+        return list;
+    }
+
+    public List<Record> getRecordsOfCurrentYear() {
+        Calendar now = Calendar.getInstance();
+        final int curYear = now.get(Calendar.YEAR);
+        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
+            @Override
+            public boolean isMatch(Model model) {
+                Calendar data = Calendar.getInstance();
+                data.setTimeInMillis(((Record) model).getCreated());
+                int year = data.get(Calendar.YEAR);
+                return curYear == year;
+            }
+        });
+        Collections.sort(list);
+        return list;
+    }
+
+    public List<Record> getRecordsOfCurrentMonth() {
+        Calendar now = Calendar.getInstance();
+        final int curMonth = now.get(Calendar.MONTH);
+        final int curYear = now.get(Calendar.YEAR);
+        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
+            @Override
+            public boolean isMatch(Model model) {
+                Calendar data = Calendar.getInstance();
+                data.setTimeInMillis(((Record) model).getCreated());
+                int month = data.get(Calendar.MONTH);
+                int year = data.get(Calendar.YEAR);
+                return curMonth == month && curYear == year;
+            }
+        });
         Collections.sort(list);
         return list;
     }

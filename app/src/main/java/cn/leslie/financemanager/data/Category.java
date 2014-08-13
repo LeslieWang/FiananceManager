@@ -6,6 +6,11 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * Data object that describes a category.
  */
 public class Category extends Model implements Comparable<Category> {
+    /**
+     * do not calculate this category while statistics.
+     * TODO: better solution
+     */
+    public static final int FIXED_OUTCOME_INCOME = 9;
 
     @JsonProperty("name")
     private String mName;
