@@ -33,8 +33,6 @@ import com.github.mikephil.charting.utils.Legend.LegendPosition;
 public class PieChart extends Chart {
     private static final float THRESHOLD_NOT_DISPLAY = 0.1f;
     private static final int DATA_CIRCLE_OFFSET = 30;
-    private static final int DESCRIPTION_OFFSET_RIGHT = 80;
-    private static final int DESCRIPTION_OFFSET_BOTTOM = 20;
 
     /**
      * rect object that represents the bounds of the piechart, needed for
@@ -166,7 +164,7 @@ public class PieChart extends Chart {
 
         drawLegend();
 
-        drawDescription();
+        //drawDescription();
 
         drawCenterText();
 
@@ -333,15 +331,17 @@ public class PieChart extends Chart {
     @Override
     protected void prepareContentRect() {
         super.prepareContentRect();
+        int width = mContentRect.width();
+        int height = mContentRect.height();
         int diameter = getDiameter();
 
         // create the circle box that will contain the pie-chart (the bounds of
         // the pie-chart)
         mCircleBox.set(
-                DATA_CIRCLE_OFFSET + mShift,
-                DATA_CIRCLE_OFFSET + mShift - DESCRIPTION_OFFSET_BOTTOM,
-                diameter - mShift - DATA_CIRCLE_OFFSET,
-                diameter - mShift - DATA_CIRCLE_OFFSET - DESCRIPTION_OFFSET_BOTTOM);
+                (width - diameter) / 2 + mShift + DATA_CIRCLE_OFFSET,
+                (height - diameter) / 2 + mShift + DATA_CIRCLE_OFFSET,
+                (width + diameter) / 2 - mShift - DATA_CIRCLE_OFFSET,
+                (height + diameter) / 2 - mShift - DATA_CIRCLE_OFFSET);
     }
 
     @Override
@@ -390,12 +390,6 @@ public class PieChart extends Chart {
             }
         }
 
-    }
-
-    @Override
-    protected void drawDescription() {
-        mDrawCanvas.drawText(mDescription, getWidth() - DESCRIPTION_OFFSET_RIGHT,
-                getHeight() - DESCRIPTION_OFFSET_BOTTOM , mDescPaint);
     }
 
     @Override

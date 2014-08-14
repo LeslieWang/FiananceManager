@@ -7,9 +7,13 @@ import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.data.ChartData;
+import com.github.mikephil.charting.data.DataSet;
+import com.github.mikephil.charting.data.Entry;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.leslie.financemanager.data.Category;
 import cn.leslie.financemanager.data.DataManager;
@@ -119,22 +123,69 @@ public class Utility {
         public boolean onDelete();
     }
 
-    public static Map<String, Float> calculateAmountByCategory(List<Record> records) {
-        HashMap<String, Float> res = new HashMap<String, Float>();
+//    public static Map<String, Float> calculateAmountByCategory(List<Record> records) {
+//        HashMap<String, Float> res = new HashMap<String, Float>();
+//
+//        if (records != null && records.size() > 0) {
+//            for (Record record : records) {
+//                if (record.getCategory() != Category.FIXED_OUTCOME_INCOME) {
+//                    String name = getCategoryName(record);
+//                    if (res.containsKey(name)) {
+//                        res.put(name, res.get(name) + record.getAmount());
+//                    } else {
+//                        res.put(name, record.getAmount());
+//                    }
+//                }
+//            }
+//        }
+//        return res;
+//    }
+
+    public static ChartData toChartData(List<StatisticsData> datas) {
+        ArrayList<Entry> series = new ArrayList<Entry>();
+        ArrayList<String> xVals = new ArrayList<String>();
+        for (int i = 0; i < datas.size(); i++) {
+            StatisticsData data = datas.get(i);
+            if (data.mId != Category.FIXED_OUTCOME_INCOME) {
+                series.add(new Entry(data.mAmount, i));
+                xVals.add(data.mName);
+            }
+        }
+
+        return new ChartData(xVals, new DataSet(series, ""));
+    }
+
+    public static List<StatisticsData> analyzeRecordsByCategory(List<Record> records) {
+        HashMap<Long, StatisticsData> res = new HashMap<Long, StatisticsData>();
 
         if (records != null && records.size() > 0) {
             for (Record record : records) {
-                if (record.getCategory() != Category.FIXED_OUTCOME_INCOME) {
-                    String name = getCategoryName(record);
-                    if (res.containsKey(name)) {
-                        res.put(name, res.get(name) + record.getAmount());
+                StatisticsData data;
+                if (res.containsKey(record.getCategory())) {
+                    data = res.get(record.getCategory());
+                    if (record.getType() == Record.TYPE_INCOME) {
+                        data.mAmount -= record.getAmount();
                     } else {
-                        res.put(name, record.getAmount());
+                        data.mAmount += record.getAmount();
                     }
+                    data.mRecordCount++;
+                } else {
+                    String name = getCategoryName(record);
+                    data = new StatisticsData();
+                    data.mId = record.getCategory();
+                    data.mName = name;
+
+                    if (record.getType() == Record.TYPE_INCOME) {
+                        data.mAmount = 0 - record.getAmount();
+                    } else {
+                        data.mAmount = record.getAmount();
+                    }
+                    data.mRecordCount = 1;
                 }
+                res.put(data.mId, data);
             }
         }
-        return res;
+        return new ArrayList<StatisticsData>(res.values());
     }
 
     private static String getCategoryName(Record record) {
@@ -147,5 +198,12 @@ public class Utility {
         } else {
             return category.getName();
         }
+    }
+
+    public static class StatisticsData {
+        public float mAmount;
+        public long mId;
+        public String mName;
+        public int mRecordCount;
     }
 }

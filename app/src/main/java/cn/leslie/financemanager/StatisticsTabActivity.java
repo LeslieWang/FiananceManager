@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,16 +15,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.ChartData;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import cn.leslie.financemanager.data.Category;
 import cn.leslie.financemanager.data.DataManager;
 import cn.leslie.financemanager.data.Record;
 
@@ -166,22 +167,46 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             loadData();
+
+            List<Utility.StatisticsData> datas = Utility.analyzeRecordsByCategory(mRecords);
             View rootView = inflater.inflate(R.layout.fragment_statistics_tab, container, false);
+
+            initPieChart(rootView, datas);
+            initSummary(rootView, datas);
+            initCateList(rootView, datas);
+
+            return rootView;
+        }
+
+        private void initPieChart(View rootView, List<Utility.StatisticsData> datas) {
             PieChart pieChart = (PieChart) rootView.findViewById(R.id.pie_chart);
-            Map<String, Float> data = Utility.calculateAmountByCategory(mRecords);
             pieChart.setDrawHoleEnabled(false);
             pieChart.setDrawXValues(true);
             pieChart.setDrawYValues(true);
-            pieChart.setDrawLegend(false);
-            pieChart.setDescription(getString(R.string.statistics_by_category));
-            pieChart.setData(new ArrayList<String>(data.keySet()),
-                    new ArrayList<Float>(data.values()));
+            pieChart.setDrawLegend(false);//getString(R.string.statistics_by_category)
+            pieChart.setDescription("");
+            pieChart.setData(Utility.toChartData(datas));
             pieChart.setValuePaintColor(Color.GRAY);
             pieChart.setCenterText(getString(R.string.statistics_in_total,
                     (int) pieChart.getYValueSum()));
             pieChart.prepare();
+        }
 
-            return rootView;
+        private void initSummary(View rootView, List<Utility.StatisticsData> datas) {
+            float amount = 0;
+            int count = 0;
+            for (Utility.StatisticsData data : datas) {
+                amount += data.mAmount;
+                count += data.mRecordCount;
+            }
+            String type = amount > 0 ? "支出 " : "收入 ";
+            TextView summary = (TextView) rootView.findViewById(R.id.text_summary);
+            summary.setText("总收支为:\n" + type + (int) Math.abs(amount) + "\n" + "总共" + count + "条记录");
+        }
+
+        private void initCateList(View rootView, List<Utility.StatisticsData> datas) {
+            ListView cateList = (ListView) rootView.findViewById(R.id.list_cate);
+            cateList.setAdapter(new CategoryAdapter(datas, getActivity()));
         }
 
         private void loadData() {
@@ -202,6 +227,76 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
                 default:
                     // TODO:
             }
+        }
+    }
+
+    private static class CategoryAdapter extends BaseAdapter {
+        private List<Utility.StatisticsData> mData;
+        private float mAmount;
+        private Context mContext;
+
+        public void updateData(List<Utility.StatisticsData> data) {
+            if (data == null) {
+                mData = new ArrayList<Utility.StatisticsData>();
+            } else {
+                mData = data;
+            }
+            mAmount = 0;
+            for (Utility.StatisticsData d : mData) {
+                if (d.mId != Category.FIXED_OUTCOME_INCOME) {
+                    mAmount += d.mAmount;
+                }
+            }
+            notifyDataSetChanged();
+        }
+
+        CategoryAdapter(List<Utility.StatisticsData> data, Context context) {
+            mContext = context;
+            updateData(data);
+        }
+
+        @Override
+        public int getCount() {
+            return mData.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mData.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return ((Utility.StatisticsData) getItem(position)).mId;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+
+            if (convertView != null) {
+                view = convertView;
+            } else {
+                view = LayoutInflater.from(mContext).inflate(
+                        R.layout.statistics_item_cate, parent, false);
+            }
+
+            Utility.StatisticsData data = mData.get(position);
+            ((TextView) view.findViewById(R.id.text_name)).setText(data.mName);
+            ((TextView) view.findViewById(R.id.text_amount)).setText(
+                    String.format("%.2f", data.mAmount));
+
+            if (data.mId != Category.FIXED_OUTCOME_INCOME) {
+                float percent = (data.mAmount * 100) / mAmount;
+                ((TextView) view.findViewById(R.id.text_percent)).setText(
+                        String.format("%.2f%%", percent));
+            } else {
+                ((TextView) view.findViewById(R.id.text_percent)).setText("");
+            }
+
+            ((TextView) view.findViewById(R.id.text_record_count)).setText(
+                    data.mRecordCount + "条记录");
+            return view;
         }
     }
 

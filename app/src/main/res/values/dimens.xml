@@ -11,5 +11,6 @@
     <dimen name="record_item_size">50dp</dimen>
     <dimen name="list_item_padding">5dp</dimen>
     <dimen name="record_detail_padding">12dp</dimen>
+    <dimen name="statistics_cate_item_height">30dp</dimen>
 
 </resources>
