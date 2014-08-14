@@ -382,12 +382,12 @@ public abstract class Chart extends View {
 
         if (mDrawBitmap == null || mDrawCanvas == null) {
 
-            // use RGB_565 for best performance
-            mDrawBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.RGB_565);
+            // use ARGB_8888 to display background
+            mDrawBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
             mDrawCanvas = new Canvas(mDrawBitmap);
         }
 
-        mDrawCanvas.drawColor(Color.WHITE); // clear all
+        mDrawCanvas.drawColor(Color.TRANSPARENT);
     }
 
     /**
