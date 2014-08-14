@@ -6,6 +6,6 @@
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pie_chart"
-        android:layout_width="match_parent"
+        android:layout_width="240dp"
         android:layout_height="240dp" />
 </RelativeLayout>

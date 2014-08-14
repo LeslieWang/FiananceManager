@@ -44,6 +44,6 @@
     <string name="current_year">本年</string>
     <string name="statistics_all">所有</string>
     <string name="statistics_others_portion">*其他*</string>
-    <string name="statistics_by_category">按类别统计</string>
+    <string name="statistics_by_category">按类别统计,低于10%的类别统一记为*其他*</string>
     <string name="statistics_in_total">总计:%1$s</string>
 </resources>

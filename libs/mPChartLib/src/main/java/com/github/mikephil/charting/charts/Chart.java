@@ -318,7 +318,7 @@ public abstract class Chart extends View {
             series.add(new Entry(yVals.get(i), i));
         }
 
-        DataSet set = new DataSet(series, "DataSet");
+        DataSet set = new DataSet(series, "");
         ArrayList<DataSet> dataSets = new ArrayList<DataSet>();
         dataSets.add(set);
 

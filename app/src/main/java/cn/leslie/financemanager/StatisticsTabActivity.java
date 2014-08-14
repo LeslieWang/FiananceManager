@@ -168,10 +168,11 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
             loadData();
             View rootView = inflater.inflate(R.layout.fragment_statistics_tab, container, false);
             PieChart pieChart = (PieChart) rootView.findViewById(R.id.pie_chart);
-            Map<String, Float> data = Utility.calculateAmountByCategory(getActivity(), mRecords);
+            Map<String, Float> data = Utility.calculateAmountByCategory(mRecords);
             pieChart.setDrawHoleEnabled(false);
             pieChart.setDrawXValues(true);
             pieChart.setDrawYValues(true);
+            pieChart.setDrawLegend(false);
             pieChart.setDescription(getString(R.string.statistics_by_category));
             pieChart.setData(new ArrayList<String>(data.keySet()),
                     new ArrayList<Float>(data.values()));

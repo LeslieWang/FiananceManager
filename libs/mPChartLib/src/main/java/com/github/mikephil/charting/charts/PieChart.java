@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.listener.PieChartTouchListener;
@@ -30,6 +31,10 @@ import com.github.mikephil.charting.utils.Legend.LegendPosition;
  * @author Philipp Jahoda
  */
 public class PieChart extends Chart {
+    private static final float THRESHOLD_NOT_DISPLAY = 0.1f;
+    private static final int DATA_CIRCLE_OFFSET = 30;
+    private static final int DESCRIPTION_OFFSET_RIGHT = 80;
+    private static final int DESCRIPTION_OFFSET_BOTTOM = 20;
 
     /**
      * rect object that represents the bounds of the piechart, needed for
@@ -94,6 +99,12 @@ public class PieChart extends Chart {
      */
     private Paint mCenterTextPaint;
 
+    /**
+     * simplify pie chart by replace all entries which is smaller than
+     * {@link #THRESHOLD_NOT_DISPLAY} with a simple entry "others".
+     */
+    private boolean mNeedSimplify = true;
+
     public PieChart(Context context) {
         super(context);
     }
@@ -111,10 +122,10 @@ public class PieChart extends Chart {
         super.init();
 
         // // piechart has no offsets
-        // mOffsetTop = 0;
-        // mOffsetBottom = 0;
-        // mOffsetLeft = 0;
-        // mOffsetRight = 0;
+        mOffsetTop = 0;
+        mOffsetBottom = 0;
+        mOffsetLeft = 0;
+        mOffsetRight = 0;
 
         mShift = Utils.convertDpToPixel(mShift);
 
@@ -222,6 +233,37 @@ public class PieChart extends Chart {
         mMatrixOffset.set(offset);
     }
 
+    @Override
+    public void setData(ChartData data) {
+        super.setData(data);
+        if (!mNeedSimplify) {
+            return;
+        }
+        float threshold = mOriginalData.getYValueSum() * THRESHOLD_NOT_DISPLAY;
+        float othersSum = 0f;
+        ArrayList<String> xVals = new ArrayList<String>();
+        ArrayList<Entry> yValsOrig = mOriginalData.getDataSets().get(0).getYVals();
+        ArrayList<Entry> yVals = new ArrayList<Entry>();
+        for (int i = 0; i < yValsOrig.size(); i++) {
+            float yVal = yValsOrig.get(i).getVal();
+            if (yVal > threshold) {
+                xVals.add(mOriginalData.getXVals().get(i));
+                yVals.add(new Entry(yVal, yVals.size()));
+            } else {
+                othersSum += yVal;
+            }
+        }
+
+        if (othersSum > 0f) {
+            xVals.add("*其他*");
+            yVals.add(new Entry(othersSum, yVals.size()));
+            DataSet set = new DataSet(yVals, "");
+            ArrayList<DataSet> dataSets = new ArrayList<DataSet>();
+            dataSets.add(set);
+            mCurrentData = new ChartData(xVals, dataSets);
+        }
+    }
+
     /** the decimalformat responsible for formatting the values in the chart */
     protected DecimalFormat mFormatValue = null;
 
@@ -291,18 +333,15 @@ public class PieChart extends Chart {
     @Override
     protected void prepareContentRect() {
         super.prepareContentRect();
-
-        int width = mContentRect.width() + mOffsetLeft + mOffsetRight;
-        int height = mContentRect.height() + mOffsetTop + mOffsetBottom;
-
-        float diameter = getDiameter();
+        int diameter = getDiameter();
 
         // create the circle box that will contain the pie-chart (the bounds of
         // the pie-chart)
-        mCircleBox.set(width / 2 - diameter / 2 + mShift, height / 2 - diameter / 2
-                + mShift,
-                width / 2 + diameter / 2 - mShift, height / 2 + diameter / 2
-                        - mShift);
+        mCircleBox.set(
+                DATA_CIRCLE_OFFSET + mShift,
+                DATA_CIRCLE_OFFSET + mShift - DESCRIPTION_OFFSET_BOTTOM,
+                diameter - mShift - DATA_CIRCLE_OFFSET,
+                diameter - mShift - DATA_CIRCLE_OFFSET - DESCRIPTION_OFFSET_BOTTOM);
     }
 
     @Override
@@ -310,6 +349,14 @@ public class PieChart extends Chart {
         super.calcMinMax(fixedValues);
 
         calcAngles();
+    }
+
+    /**
+     * set need to simplify pie chart by replace all entries which is smaller than
+     * {@link #THRESHOLD_NOT_DISPLAY} with a simple entry "others" or not.
+     */
+    public void setNeedSimplify(boolean need) {
+        mNeedSimplify = need;
     }
 
     /**
@@ -343,6 +390,12 @@ public class PieChart extends Chart {
             }
         }
 
+    }
+
+    @Override
+    protected void drawDescription() {
+        mDrawCanvas.drawText(mDescription, getWidth() - DESCRIPTION_OFFSET_RIGHT,
+                getHeight() - DESCRIPTION_OFFSET_BOTTOM , mDescPaint);
     }
 
     @Override
@@ -778,7 +831,7 @@ public class PieChart extends Chart {
      * 
      * @return
      */
-    public float getDiameter() {
+    public int getDiameter() {
         if (mContentRect == null)
             return 0;
         else
