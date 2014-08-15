@@ -155,7 +155,8 @@ public class Utility {
         return new ChartData(xVals, new DataSet(series, ""));
     }
 
-    public static List<StatisticsData> analyzeRecordsByCategory(List<Record> records) {
+    public static StatisticsResult analyzeRecordsByCategory(List<Record> records) {
+        StatisticsResult result = new StatisticsResult();
         HashMap<Long, StatisticsData> res = new HashMap<Long, StatisticsData>();
 
         if (records != null && records.size() > 0) {
@@ -163,29 +164,40 @@ public class Utility {
                 StatisticsData data;
                 if (res.containsKey(record.getCategory())) {
                     data = res.get(record.getCategory());
-                    if (record.getType() == Record.TYPE_INCOME) {
-                        data.mAmount -= record.getAmount();
-                    } else {
-                        data.mAmount += record.getAmount();
-                    }
-                    data.mRecordCount++;
                 } else {
                     String name = getCategoryName(record);
                     data = new StatisticsData();
                     data.mId = record.getCategory();
                     data.mName = name;
-
-                    if (record.getType() == Record.TYPE_INCOME) {
-                        data.mAmount = 0 - record.getAmount();
-                    } else {
-                        data.mAmount = record.getAmount();
-                    }
-                    data.mRecordCount = 1;
                 }
+
+                if (record.getType() == Record.TYPE_INCOME) {
+                    data.mAmount -= record.getAmount();
+                    result.mIncome += record.getAmount();
+                    if (record.getPerson() == Record.PERSON_MALE) {
+                        result.mMaleIncome += record.getAmount();
+                    } else if (record.getPerson() == Record.PERSON_FEMALE) {
+                        result.mFemaleIncome += record.getAmount();
+                    } else {
+                        result.mAllIncome += record.getAmount();
+                    }
+                } else {
+                    data.mAmount += record.getAmount();
+                    result.mOutcome += record.getAmount();
+                    if (record.getPerson() == Record.PERSON_MALE) {
+                        result.mMaleOutcome += record.getAmount();
+                    } else if (record.getPerson() == Record.PERSON_FEMALE) {
+                        result.mFemaleOutcome += record.getAmount();
+                    } else {
+                        result.mAllOutcome += record.getAmount();
+                    }
+                }
+                data.mRecordCount++;
                 res.put(data.mId, data);
             }
         }
-        return new ArrayList<StatisticsData>(res.values());
+        result.mDatas = new ArrayList<StatisticsData>(res.values());
+        return result;
     }
 
     private static String getCategoryName(Record record) {
@@ -201,9 +213,21 @@ public class Utility {
     }
 
     public static class StatisticsData {
-        public float mAmount;
+        public float mAmount = 0f;
         public long mId;
         public String mName;
-        public int mRecordCount;
+        public int mRecordCount = 0;
+    }
+
+    public static class StatisticsResult {
+        public List<StatisticsData> mDatas;
+        public float mMaleOutcome = 0f;
+        public float mFemaleOutcome = 0f;
+        public float mAllOutcome = 0f;
+        public float mMaleIncome = 0f;
+        public float mFemaleIncome = 0f;
+        public float mAllIncome = 0f;
+        public float mIncome = 0f;
+        public float mOutcome = 0f;
     }
 }

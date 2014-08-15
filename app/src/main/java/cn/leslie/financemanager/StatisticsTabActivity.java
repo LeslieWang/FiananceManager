@@ -167,12 +167,12 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             loadData();
-
-            List<Utility.StatisticsData> datas = Utility.analyzeRecordsByCategory(mRecords);
+            Utility.StatisticsResult result = Utility.analyzeRecordsByCategory(mRecords);
+            List<Utility.StatisticsData> datas = result.mDatas;
             View rootView = inflater.inflate(R.layout.fragment_statistics_tab, container, false);
 
             initPieChart(rootView, datas);
-            initSummary(rootView, datas);
+            initSummary(rootView, result);
             initCateList(rootView, datas);
 
             return rootView;
@@ -192,16 +192,21 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
             pieChart.prepare();
         }
 
-        private void initSummary(View rootView, List<Utility.StatisticsData> datas) {
-            float amount = 0;
+        private void initSummary(View rootView, Utility.StatisticsResult result) {
             int count = 0;
-            for (Utility.StatisticsData data : datas) {
-                amount += data.mAmount;
+            for (Utility.StatisticsData data : result.mDatas) {
                 count += data.mRecordCount;
             }
-            String type = amount > 0 ? "支出 " : "收入 ";
             TextView summary = (TextView) rootView.findViewById(R.id.text_summary);
-            summary.setText("总收支为:\n" + type + (int) Math.abs(amount) + "\n" + "总共" + count + "条记录");
+            String res = "收入: " + (int) result.mIncome + " 支出: " + (int) result.mOutcome
+                    + "\n" + Utility.toPersonStr(getActivity(), Record.PERSON_MALE) + " 收入: "
+                    + (int) result.mMaleIncome + " 支出: " + (int) result.mMaleOutcome
+                    + "\n" + Utility.toPersonStr(getActivity(), Record.PERSON_FEMALE) + " 收入: "
+                    + (int) result.mFemaleIncome + " 支出: " + (int) result.mFemaleOutcome
+                    + "\n" + Utility.toPersonStr(getActivity(), Record.PERSON_ALL) + " 收入: "
+                    + (int) result.mAllIncome + " 支出: " + (int) result.mAllOutcome
+                    + "\n总共 " + count + " 条记录";
+            summary.setText(res);
         }
 
         private void initCateList(View rootView, List<Utility.StatisticsData> datas) {
