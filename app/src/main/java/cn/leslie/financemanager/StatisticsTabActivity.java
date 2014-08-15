@@ -164,21 +164,37 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
         }
 
         @Override
+        public void onResume() {
+            super.onResume();
+            updateViews(getView());
+        }
+
+        @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            loadData();
-            Utility.StatisticsResult result = Utility.analyzeRecordsByCategory(mRecords);
-            List<Utility.StatisticsData> datas = result.mDatas;
             View rootView = inflater.inflate(R.layout.fragment_statistics_tab, container, false);
-
-            initPieChart(rootView, datas);
-            initSummary(rootView, result);
-            initCateList(rootView, datas);
+            rootView.findViewById(R.id.btn_view_all).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ViewRecordActivity.show(getActivity());
+                }
+            });
+            updateViews(rootView);
 
             return rootView;
         }
 
-        private void initPieChart(View rootView, List<Utility.StatisticsData> datas) {
+        private void updateViews(View rootView) {
+            loadData();
+            Utility.StatisticsResult result = Utility.analyzeRecordsByCategory(mRecords);
+            List<Utility.StatisticsData> datas = result.mDatas;
+
+            updatePieChart(rootView, datas);
+            updateSummary(rootView, result);
+            updateCateList(rootView, datas);
+        }
+
+        private void updatePieChart(View rootView, List<Utility.StatisticsData> datas) {
             PieChart pieChart = (PieChart) rootView.findViewById(R.id.pie_chart);
             pieChart.setDrawHoleEnabled(false);
             pieChart.setDrawXValues(true);
@@ -192,7 +208,7 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
             pieChart.prepare();
         }
 
-        private void initSummary(View rootView, Utility.StatisticsResult result) {
+        private void updateSummary(View rootView, Utility.StatisticsResult result) {
             int count = 0;
             for (Utility.StatisticsData data : result.mDatas) {
                 count += data.mRecordCount;
@@ -209,7 +225,7 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
             summary.setText(res);
         }
 
-        private void initCateList(View rootView, List<Utility.StatisticsData> datas) {
+        private void updateCateList(View rootView, List<Utility.StatisticsData> datas) {
             ListView cateList = (ListView) rootView.findViewById(R.id.list_cate);
             cateList.setAdapter(new CategoryAdapter(datas, getActivity()));
         }

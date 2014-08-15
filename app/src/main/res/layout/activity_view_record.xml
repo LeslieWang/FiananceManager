@@ -1,0 +1,14 @@
+<com.fortysevendeg.swipelistview.SwipeListView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/list_record"
+    swipe:swipeBackView="@id/swipe_back"
+    swipe:swipeFrontView="@id/swipe_front"
+    swipe:swipeMode="left"
+    swipe:swipeOffsetLeft="250dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:divider="@null"
+    android:padding="@dimen/small_widget_padding"
+    tools:listitem="@layout/item_record" />

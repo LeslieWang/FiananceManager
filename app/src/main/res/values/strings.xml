@@ -47,4 +47,6 @@
     <string name="statistics_by_category">按类别统计(不计固定收支)\n低于10%记为*其他*</string>
     <string name="statistics_in_total">总计:%1$s</string>
     <string name="view_all_records">查看所有记录</string>
+    <string name="title_activity_view_record">查看记录</string>
+
 </resources>

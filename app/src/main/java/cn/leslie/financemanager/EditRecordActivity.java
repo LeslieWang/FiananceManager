@@ -2,6 +2,7 @@ package cn.leslie.financemanager;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,10 +11,10 @@ import android.view.MenuItem;
 public class EditRecordActivity extends Activity implements RecordEditorFragment.OnSaveListener {
     private static final String ARG_RECORD_ID = "record_id";
 
-    public static void show(Activity activity, long id) {
-        Intent intent = new Intent(activity, EditRecordActivity.class);
+    public static void show(Context context, long id) {
+        Intent intent = new Intent(context, EditRecordActivity.class);
         intent.putExtra(ARG_RECORD_ID, id);
-        activity.startActivity(intent);
+        context.startActivity(intent);
     }
 
     @Override

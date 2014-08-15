@@ -30,6 +30,10 @@
             android:name=".StatisticsTabActivity"
             android:label="@string/title_activity_statistics" >
         </activity>
+        <activity
+            android:name=".ViewRecordActivity"
+            android:label="@string/title_activity_view_record" >
+        </activity>
     </application>
 
 </manifest>
