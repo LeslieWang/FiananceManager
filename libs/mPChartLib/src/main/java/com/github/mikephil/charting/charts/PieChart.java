@@ -234,7 +234,7 @@ public class PieChart extends Chart {
     @Override
     public void setData(ChartData data) {
         super.setData(data);
-        if (!mNeedSimplify) {
+        if (!mNeedSimplify || mDataNotSet) {
             return;
         }
         float threshold = mOriginalData.getYValueSum() * THRESHOLD_NOT_DISPLAY;

@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.ChartData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -195,17 +196,20 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
         }
 
         private void updatePieChart(View rootView, List<Utility.StatisticsData> datas) {
-            PieChart pieChart = (PieChart) rootView.findViewById(R.id.pie_chart);
-            pieChart.setDrawHoleEnabled(false);
-            pieChart.setDrawXValues(true);
-            pieChart.setDrawYValues(true);
-            pieChart.setDrawLegend(false);//getString(R.string.statistics_by_category)
-            pieChart.setDescription("");
-            pieChart.setData(Utility.toChartData(datas));
-            pieChart.setValuePaintColor(Color.GRAY);
-            pieChart.setCenterText(getString(R.string.statistics_in_total,
-                    (int) pieChart.getYValueSum()));
-            pieChart.prepare();
+            ChartData data = Utility.toChartData(datas);
+            if (data.isValid()) {
+                PieChart pieChart = (PieChart) rootView.findViewById(R.id.pie_chart);
+                pieChart.setDrawHoleEnabled(false);
+                pieChart.setDrawXValues(true);
+                pieChart.setDrawYValues(true);
+                pieChart.setDrawLegend(false);
+                pieChart.setDescription("");
+                pieChart.setData(data);
+                pieChart.setValuePaintColor(Color.GRAY);
+                pieChart.setCenterText(getString(R.string.statistics_in_total,
+                        (int) pieChart.getYValueSum()));
+                pieChart.prepare();
+            }
         }
 
         private void updateSummary(View rootView, Utility.StatisticsResult result) {

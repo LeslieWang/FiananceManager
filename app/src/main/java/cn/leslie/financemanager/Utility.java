@@ -12,6 +12,7 @@ import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,8 +56,8 @@ public class Utility {
     }
 
     public static int calculateDayOffset(long time1, long time2) {
-        long offset = (time1 / ONE_DAY_IN_MILLIS) - (time2 / ONE_DAY_IN_MILLIS);
-        return (int) offset;
+        long offset = Calendar.getInstance().getTimeZone().getRawOffset();
+        return (int) (((time1 + offset) / ONE_DAY_IN_MILLIS) - ((time2 + offset)/ ONE_DAY_IN_MILLIS));
     }
 
     public static String getRelativeDateName(Context context, long time) {
@@ -122,24 +123,6 @@ public class Utility {
     public interface OnDeleteConfirmListener {
         public boolean onDelete();
     }
-
-//    public static Map<String, Float> calculateAmountByCategory(List<Record> records) {
-//        HashMap<String, Float> res = new HashMap<String, Float>();
-//
-//        if (records != null && records.size() > 0) {
-//            for (Record record : records) {
-//                if (record.getCategory() != Category.FIXED_OUTCOME_INCOME) {
-//                    String name = getCategoryName(record);
-//                    if (res.containsKey(name)) {
-//                        res.put(name, res.get(name) + record.getAmount());
-//                    } else {
-//                        res.put(name, record.getAmount());
-//                    }
-//                }
-//            }
-//        }
-//        return res;
-//    }
 
     public static ChartData toChartData(List<StatisticsData> datas) {
         ArrayList<Entry> series = new ArrayList<Entry>();
