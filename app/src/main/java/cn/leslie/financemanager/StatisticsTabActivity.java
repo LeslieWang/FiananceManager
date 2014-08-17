@@ -197,8 +197,8 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
 
         private void updatePieChart(View rootView, List<Utility.StatisticsData> datas) {
             ChartData data = Utility.toChartData(datas);
+            PieChart pieChart = (PieChart) rootView.findViewById(R.id.pie_chart);
             if (data.isValid()) {
-                PieChart pieChart = (PieChart) rootView.findViewById(R.id.pie_chart);
                 pieChart.setDrawHoleEnabled(false);
                 pieChart.setDrawXValues(true);
                 pieChart.setDrawYValues(true);
@@ -210,6 +210,7 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
                         (int) pieChart.getYValueSum()));
                 pieChart.prepare();
             }
+            pieChart.setVisibility(data.isValid() ? View.VISIBLE : View.INVISIBLE);
         }
 
         private void updateSummary(View rootView, Utility.StatisticsResult result) {
