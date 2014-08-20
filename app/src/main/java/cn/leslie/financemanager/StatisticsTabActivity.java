@@ -11,8 +11,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -23,6 +25,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.ChartData;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import cn.leslie.financemanager.data.Category;
@@ -91,6 +94,7 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
                     .setTabListener(this));
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -149,9 +153,11 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
     public static class StatisticsFragment extends Fragment {
         private static final String ARG_NAME_RES_ID = "name_res_id";
         private List<Record> mRecords;
+        private GestureDetector mDetector;
         private long mStart = DataManager.INVALID_TIMESTAMP;
         private long mEnd = DataManager.INVALID_TIMESTAMP;
         private long mCateId = DataManager.INVALID_CATE_ID;
+        private int mOffset = 0;
 
         /**
          * Returns a new instance of this fragment for the given section name resource id.
@@ -165,6 +171,31 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
         }
 
         public StatisticsFragment() {
+            mDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDown(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                    if (Math.abs(velocityY) > 100) {
+                        if (velocityY > 0) {
+                            // go to previous
+                            if (mOffset < 0) {
+                                mOffset++;
+                                updateViews(getView());
+                            }
+                        } else {
+                            // go to next
+                            mOffset--;
+                            updateViews(getView());
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
 
         @Override
@@ -185,6 +216,12 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
             });
             updateViews(rootView);
 
+            rootView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return mDetector.onTouchEvent(event);
+                }
+            });
             return rootView;
         }
 
@@ -193,9 +230,34 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
             Utility.StatisticsResult result = Utility.analyzeRecordsByCategory(mRecords);
             List<Utility.StatisticsData> datas = result.mDatas;
 
+            updateTitle(rootView);
             updatePieChart(rootView, datas);
             updateSummary(rootView, result);
             updateCateList(rootView, datas);
+        }
+
+        private void updateTitle(View rootView) {
+            TextView title = (TextView) rootView.findViewById(R.id.text_title);
+            int id = getArguments().getInt(ARG_NAME_RES_ID);
+            Calendar date = Calendar.getInstance();
+            date.setTimeInMillis(mStart);
+            String res = "";
+            switch (id) {
+                case R.string.current_week:
+                    res = date.get(Calendar.YEAR) + "年 第" + date.get(Calendar.WEEK_OF_YEAR) + "周";
+                    break;
+                case R.string.current_month:
+                    res = date.get(Calendar.YEAR) + "年" + (date.get(Calendar.MONTH) + 1) + "月";
+                    break;
+                case R.string.current_year:
+                    res = date.get(Calendar.YEAR) + "年";
+                    break;
+                case R.string.statistics_all:
+                    break;
+                default:
+                    // TODO:
+            }
+            title.setText(res);
         }
 
         private void updatePieChart(View rootView, List<Utility.StatisticsData> datas) {
@@ -214,6 +276,7 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
                 pieChart.prepare();
             }
             pieChart.setVisibility(data.isValid() ? View.VISIBLE : View.INVISIBLE);
+            pieChart.invalidate();
         }
 
         private void updateSummary(View rootView, Utility.StatisticsResult result) {
@@ -242,18 +305,18 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
             int id = getArguments().getInt(ARG_NAME_RES_ID);
             switch (id) {
                 case R.string.current_week:
-                    mStart = TimeUtility.getStartTimeOfWeek(0);
-                    mEnd = DataManager.INVALID_TIMESTAMP;
+                    mStart = TimeUtility.getStartTimeOfWeek(mOffset);
+                    mEnd = TimeUtility.getStartTimeOfWeek(mOffset + 1);
                     mCateId = DataManager.INVALID_CATE_ID;
                     break;
                 case R.string.current_month:
-                    mStart = TimeUtility.getStartTimeOfMonth(0);
-                    mEnd = DataManager.INVALID_TIMESTAMP;
+                    mStart = TimeUtility.getStartTimeOfMonth(mOffset);
+                    mEnd = TimeUtility.getStartTimeOfMonth(mOffset + 1);
                     mCateId = DataManager.INVALID_CATE_ID;
                     break;
                 case R.string.current_year:
-                    mStart = TimeUtility.getStartTimeOfYear(0);
-                    mEnd = DataManager.INVALID_TIMESTAMP;
+                    mStart = TimeUtility.getStartTimeOfYear(mOffset);
+                    mEnd = TimeUtility.getStartTimeOfYear(mOffset + 1);
                     mCateId = DataManager.INVALID_CATE_ID;
                     break;
                 case R.string.statistics_all:
