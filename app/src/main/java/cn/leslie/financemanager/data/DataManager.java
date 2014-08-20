@@ -13,13 +13,10 @@ import org.codehaus.jackson.map.type.CollectionType;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import cn.leslie.financemanager.Utility;
 
 /**
  * Utility class to save and update persistent data.
@@ -27,6 +24,8 @@ import cn.leslie.financemanager.Utility;
 public class DataManager {
     private static final String TAG = "DataManager";
     private static final String PREF_MAX_ID_PREFIX = "max_id_of_";
+    public static final int INVALID_TIMESTAMP = -1;
+    public static final int INVALID_CATE_ID = -1;
 
     private static DataManager sInstance;
     private Context mContext;
@@ -79,96 +78,46 @@ public class DataManager {
     /**
      * @return all the records.
      */
-    public List<Record> getRecords() {
-        List<Record> list = getListWithFilter(mDataSets.get(Record.class), null);
+    public List<Record> getAllRecords() {
+        List list = getListWithFilter(mDataSets.get(Record.class), null);
         Collections.sort(list);
-        return list;
+        return (List<Record>) list;
     }
 
-    public List<Record> getRecordsOfCurrentWeek() {
-        Calendar now = Calendar.getInstance();
-        final int curWeek = now.get(Calendar.WEEK_OF_YEAR);
-        final int curYear = now.get(Calendar.YEAR);
-        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
+    public List<Record> getRecords(final long start, final long end, final long cateId) {
+        List list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
             @Override
             public boolean isMatch(Model model) {
-                Calendar data = Calendar.getInstance();
-                data.setTimeInMillis(((Record) model).getCreated());
-                int week = data.get(Calendar.WEEK_OF_YEAR);
-                int year = data.get(Calendar.YEAR);
-                return curWeek == week && curYear == year;
+                Record record = (Record) model;
+                return (start == INVALID_TIMESTAMP || record.getCreated() >= start)
+                        && (end == INVALID_TIMESTAMP || record.getCreated() < end)
+                        && (cateId == INVALID_CATE_ID || record.getCategory() == cateId);
             }
         });
         Collections.sort(list);
-        return list;
-    }
-
-    public List<Record> getRecordsOfCurrentYear() {
-        Calendar now = Calendar.getInstance();
-        final int curYear = now.get(Calendar.YEAR);
-        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
-            @Override
-            public boolean isMatch(Model model) {
-                Calendar data = Calendar.getInstance();
-                data.setTimeInMillis(((Record) model).getCreated());
-                int year = data.get(Calendar.YEAR);
-                return curYear == year;
-            }
-        });
-        Collections.sort(list);
-        return list;
-    }
-
-    public List<Record> getRecordsOfCurrentMonth() {
-        Calendar now = Calendar.getInstance();
-        final int curMonth = now.get(Calendar.MONTH);
-        final int curYear = now.get(Calendar.YEAR);
-        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
-            @Override
-            public boolean isMatch(Model model) {
-                Calendar data = Calendar.getInstance();
-                data.setTimeInMillis(((Record) model).getCreated());
-                int month = data.get(Calendar.MONTH);
-                int year = data.get(Calendar.YEAR);
-                return curMonth == month && curYear == year;
-            }
-        });
-        Collections.sort(list);
-        return list;
-    }
-
-    public List<Record> getRecentRecords(final int dayOffset) {
-        final long now = System.currentTimeMillis();
-        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
-            @Override
-            public boolean isMatch(Model model) {
-                return Utility.calculateDayOffset(now,((Record) model).getCreated()) < dayOffset;
-            }
-        });
-        Collections.sort(list);
-        return list;
+        return (List<Record>) list;
     }
 
     public List<Record> getRecordsByCategory(final long cateId) {
-        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
+        List list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
             @Override
             public boolean isMatch(Model model) {
                 return ((Record) model).getCategory() == cateId;
             }
         });
         Collections.sort(list);
-        return list;
+        return (List<Record>) list;
     }
 
     public List<Record> getRecordsBySubCategory(final long subCateId) {
-        List<Record> list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
+        List list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
             @Override
             public boolean isMatch(Model model) {
                 return ((Record) model).getSubCategory() == subCateId;
             }
         });
         Collections.sort(list);
-        return list;
+        return (List<Record>) list;
     }
 
     /**

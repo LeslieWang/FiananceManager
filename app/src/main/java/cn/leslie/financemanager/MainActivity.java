@@ -10,9 +10,8 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 
 import cn.leslie.financemanager.data.DataManager;
 
-
 public class MainActivity extends Activity implements RecordEditorFragment.OnSaveListener {
-    private static final int MAX_DISPLAY_DAY_OFFSET = 3; // display recent 3 days records.
+    private static final int MAX_DISPLAY_DAY_OFFSET = -2; // display recent 3 days records.
 
     private RecordListAdapter mRecordAdapter;
     private SwipeListView mSwipeListView;
@@ -76,6 +75,9 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
     }
 
     private void updateRecordList() {
-        mRecordAdapter.setRecords(DataManager.getInstance().getRecentRecords(MAX_DISPLAY_DAY_OFFSET));
+        mRecordAdapter.setRecords(DataManager.getInstance().getRecords(
+                TimeUtility.getStartTimeOfDay(MAX_DISPLAY_DAY_OFFSET),
+                DataManager.INVALID_TIMESTAMP,
+                DataManager.INVALID_CATE_ID));
     }
 }

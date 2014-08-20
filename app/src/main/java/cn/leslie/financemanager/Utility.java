@@ -12,7 +12,6 @@ import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import cn.leslie.financemanager.data.Record;
  * Helper class to handle some common functions.
  */
 public class Utility {
-    private static final int ONE_DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
 
     private Utility() {
         // make it as private
@@ -55,13 +53,8 @@ public class Utility {
         return null;
     }
 
-    public static int calculateDayOffset(long time1, long time2) {
-        long offset = Calendar.getInstance().getTimeZone().getRawOffset();
-        return (int) (((time1 + offset) / ONE_DAY_IN_MILLIS) - ((time2 + offset)/ ONE_DAY_IN_MILLIS));
-    }
-
     public static String getRelativeDateName(Context context, long time) {
-        int offset = calculateDayOffset(System.currentTimeMillis(), time);
+        int offset = TimeUtility.calculateDayOffset(System.currentTimeMillis(), time);
         switch (offset) {
             case 0:
                 return context.getString(R.string.today);

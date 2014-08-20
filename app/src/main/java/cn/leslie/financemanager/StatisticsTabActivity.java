@@ -149,6 +149,9 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
     public static class StatisticsFragment extends Fragment {
         private static final String ARG_NAME_RES_ID = "name_res_id";
         private List<Record> mRecords;
+        private long mStart = DataManager.INVALID_TIMESTAMP;
+        private long mEnd = DataManager.INVALID_TIMESTAMP;
+        private long mCateId = DataManager.INVALID_CATE_ID;
 
         /**
          * Returns a new instance of this fragment for the given section name resource id.
@@ -177,7 +180,7 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
             rootView.findViewById(R.id.btn_view_all).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ViewRecordActivity.show(getActivity());
+                    ViewRecordActivity.show(getActivity(), mStart, mEnd, mCateId);
                 }
             });
             updateViews(rootView);
@@ -239,20 +242,29 @@ public class StatisticsTabActivity extends Activity implements ActionBar.TabList
             int id = getArguments().getInt(ARG_NAME_RES_ID);
             switch (id) {
                 case R.string.current_week:
-                    mRecords = DataManager.getInstance().getRecordsOfCurrentWeek();
-                    return;
+                    mStart = TimeUtility.getStartTimeOfWeek(0);
+                    mEnd = DataManager.INVALID_TIMESTAMP;
+                    mCateId = DataManager.INVALID_CATE_ID;
+                    break;
                 case R.string.current_month:
-                    mRecords = DataManager.getInstance().getRecordsOfCurrentMonth();
-                    return;
+                    mStart = TimeUtility.getStartTimeOfMonth(0);
+                    mEnd = DataManager.INVALID_TIMESTAMP;
+                    mCateId = DataManager.INVALID_CATE_ID;
+                    break;
                 case R.string.current_year:
-                    mRecords = DataManager.getInstance().getRecordsOfCurrentYear();
-                    return;
+                    mStart = TimeUtility.getStartTimeOfYear(0);
+                    mEnd = DataManager.INVALID_TIMESTAMP;
+                    mCateId = DataManager.INVALID_CATE_ID;
+                    break;
                 case R.string.statistics_all:
-                    mRecords = DataManager.getInstance().getRecords();
-                    return;
+                    mStart = DataManager.INVALID_TIMESTAMP;
+                    mEnd = DataManager.INVALID_TIMESTAMP;
+                    mCateId = DataManager.INVALID_CATE_ID;
+                    break;
                 default:
                     // TODO:
             }
+            mRecords = DataManager.getInstance().getRecords(mStart, mEnd, mCateId);
         }
     }
 
