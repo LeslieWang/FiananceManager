@@ -9,6 +9,7 @@
         android:id="@+id/text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
         android:layout_gravity="center_horizontal"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/default_widget_padding"
+            android:paddingTop="5dp"
             android:orientation="vertical">
             <TextView
                 android:layout_marginTop="@dimen/default_widget_padding"
@@ -38,17 +39,19 @@
                 android:layout_weight="1.0"
                 android:textSize="12sp"/>
             <Button
-                android:id="@+id/btn_view_all"
+                android:id="@+id/btn_view_records"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/view_all_records"/>
+                android:text="@string/view_records"/>
         </LinearLayout>
     </LinearLayout>
     <ListView
         android:id="@+id/list_cate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         tools:listitem="@layout/statistics_item_cate"
-        android:divider="@null"/>
+        android:divider="@null"
+        android:dividerHeight="1dp"/>
 </LinearLayout>

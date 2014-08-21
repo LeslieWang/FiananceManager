@@ -207,7 +207,7 @@ public class ChartData {
      * @return
      */
     public boolean isValid() {
-        if (mXVals == null || mXVals.size() <= 1)
+        if (mXVals == null || mXVals.size() < 1)
             return false;
 
         if (mDataSets == null || mDataSets.size() < 1)

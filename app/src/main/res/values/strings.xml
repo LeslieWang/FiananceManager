@@ -39,16 +39,17 @@
     <string name="yesterday">昨天</string>
     <string name="before_yesterday">前天</string>
     <string name="title_activity_statistics">数据统计</string>
-    <string name="current_week">本周</string>
-    <string name="current_month">本月</string>
-    <string name="current_year">本年</string>
+    <string name="by_week">按周</string>
+    <string name="by_month">按月</string>
+    <string name="by_year">按年</string>
     <string name="statistics_all">所有</string>
     <string name="statistics_others_portion">*其他*</string>
     <string name="statistics_by_category">按类别统计(不计固定收支)\n低于10%记为*其他*</string>
     <string name="statistics_in_total">总计:%1$s</string>
-    <string name="view_all_records">查看所有记录</string>
+    <string name="view_records">查看相应记录</string>
     <string name="title_activity_view_record">查看记录</string>
     <string name="next_section">向下</string>
     <string name="previous_section">向上</string>
+    <string name="title_activity_sub_category_statistics">按子类别统计</string>
 
 </resources>

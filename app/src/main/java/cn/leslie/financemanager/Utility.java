@@ -18,6 +18,7 @@ import java.util.List;
 import cn.leslie.financemanager.data.Category;
 import cn.leslie.financemanager.data.DataManager;
 import cn.leslie.financemanager.data.Record;
+import cn.leslie.financemanager.data.SubCategory;
 
 /**
  * Helper class to handle some common functions.
@@ -131,19 +132,25 @@ public class Utility {
         return new ChartData(xVals, new DataSet(series, ""));
     }
 
-    public static StatisticsResult analyzeRecordsByCategory(List<Record> records) {
+    public interface RecordAnalyzeHandler {
+        public long getId(Record record);
+        public String getName(Record record);
+    }
+
+    public static StatisticsResult analyzeRecords(
+            List<Record> records, RecordAnalyzeHandler handler) {
         StatisticsResult result = new StatisticsResult();
         HashMap<Long, StatisticsData> res = new HashMap<Long, StatisticsData>();
 
         if (records != null && records.size() > 0) {
             for (Record record : records) {
                 StatisticsData data;
-                if (res.containsKey(record.getCategory())) {
-                    data = res.get(record.getCategory());
+                if (res.containsKey(handler.getId(record))) {
+                    data = res.get(handler.getId(record));
                 } else {
-                    String name = getCategoryName(record);
+                    String name = handler.getName(record);
                     data = new StatisticsData();
-                    data.mId = record.getCategory();
+                    data.mId = handler.getId(record);
                     data.mName = name;
                 }
 
@@ -176,7 +183,7 @@ public class Utility {
         return result;
     }
 
-    private static String getCategoryName(Record record) {
+    public static String getCategoryName(Record record) {
         if (record == null) {
             return "";
         }
@@ -185,6 +192,18 @@ public class Utility {
             return "";
         } else {
             return category.getName();
+        }
+    }
+
+    public static String getSubCategoryName(Record record) {
+        if (record == null) {
+            return "";
+        }
+        SubCategory subCategory = DataManager.getInstance().getSubCategoryById(record.getSubCategory());
+        if (subCategory == null) {
+            return "";
+        } else {
+            return subCategory.getName();
         }
     }
 

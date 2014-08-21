@@ -84,14 +84,16 @@ public class DataManager {
         return (List<Record>) list;
     }
 
-    public List<Record> getRecords(final long start, final long end, final long cateId) {
+    public List<Record> getRecords(final long start, final long end,
+                                   final long cateId, final boolean isSub) {
         List list = getListWithFilter(mDataSets.get(Record.class), new Filter() {
             @Override
             public boolean isMatch(Model model) {
                 Record record = (Record) model;
                 return (start == INVALID_TIMESTAMP || record.getCreated() >= start)
                         && (end == INVALID_TIMESTAMP || record.getCreated() < end)
-                        && (cateId == INVALID_CATE_ID || record.getCategory() == cateId);
+                        && (cateId == INVALID_CATE_ID ||
+                        (isSub ? record.getSubCategory() == cateId : record.getCategory() == cateId));
             }
         });
         Collections.sort(list);

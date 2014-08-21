@@ -78,6 +78,7 @@ public class MainActivity extends Activity implements RecordEditorFragment.OnSav
         mRecordAdapter.setRecords(DataManager.getInstance().getRecords(
                 TimeUtility.getStartTimeOfDay(MAX_DISPLAY_DAY_OFFSET),
                 DataManager.INVALID_TIMESTAMP,
-                DataManager.INVALID_CATE_ID));
+                DataManager.INVALID_CATE_ID,
+                false));
     }
 }

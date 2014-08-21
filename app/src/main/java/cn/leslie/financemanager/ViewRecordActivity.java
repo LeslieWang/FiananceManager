@@ -13,17 +13,20 @@ public class ViewRecordActivity extends Activity implements RecordEditorFragment
     private static final String EXTRA_START = "extra_start";
     private static final String EXTRA_END = "extra_end";
     private static final String EXTRA_CATE_ID = "extra_cate_id";
+    private static final String EXTRA_IS_SUB = "extra_is_sub";
 
     private RecordListAdapter mRecordAdapter;
     private long mStart = DataManager.INVALID_TIMESTAMP;
     private long mEnd = DataManager.INVALID_TIMESTAMP;
     private long mCateId = DataManager.INVALID_CATE_ID;
+    private boolean mIsSub = false;
 
-    public static void show(Context context, long start, long end, long cateId) {
+    public static void show(Context context, long start, long end, long cateId, boolean isSub) {
         Intent intent = new Intent(context, ViewRecordActivity.class);
         intent.putExtra(EXTRA_START, start);
         intent.putExtra(EXTRA_END, end);
         intent.putExtra(EXTRA_CATE_ID, cateId);
+        intent.putExtra(EXTRA_IS_SUB, isSub);
         context.startActivity(intent);
     }
 
@@ -35,6 +38,7 @@ public class ViewRecordActivity extends Activity implements RecordEditorFragment
         mStart = getIntent().getLongExtra(EXTRA_START, DataManager.INVALID_TIMESTAMP);
         mEnd = getIntent().getLongExtra(EXTRA_END, DataManager.INVALID_TIMESTAMP);
         mCateId = getIntent().getLongExtra(EXTRA_CATE_ID, DataManager.INVALID_CATE_ID);
+        mIsSub = getIntent().getBooleanExtra(EXTRA_IS_SUB, false);
 
         SwipeListView listView = (SwipeListView) findViewById(R.id.list_record);
         mRecordAdapter = new RecordListAdapter(listView, new RecordListAdapter.OnDeleteListener() {
@@ -59,6 +63,6 @@ public class ViewRecordActivity extends Activity implements RecordEditorFragment
     }
 
     private void updateRecordList() {
-        mRecordAdapter.setRecords(DataManager.getInstance().getRecords(mStart, mEnd, mCateId));
+        mRecordAdapter.setRecords(DataManager.getInstance().getRecords(mStart, mEnd, mCateId, mIsSub));
     }
 }

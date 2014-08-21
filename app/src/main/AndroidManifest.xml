@@ -34,6 +34,10 @@
             android:name=".ViewRecordActivity"
             android:label="@string/title_activity_view_record" >
         </activity>
+        <activity
+            android:name=".SubCategoryStatisticsActivity"
+            android:label="@string/title_activity_sub_category_statistics" >
+        </activity>
     </application>
 
 </manifest>
