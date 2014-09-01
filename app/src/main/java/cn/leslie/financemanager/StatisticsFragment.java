@@ -111,7 +111,6 @@ public class StatisticsFragment extends Fragment {
                 ViewRecordActivity.show(getActivity(), mStart, mEnd, mCateId, false);
             }
         });
-        updateViews(rootView);
 
         rootView.setOnTouchListener(new View.OnTouchListener() {
             @Override

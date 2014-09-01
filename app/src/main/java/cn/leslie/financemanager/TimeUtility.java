@@ -33,7 +33,6 @@ public class TimeUtility {
      */
     public static long getStartTimeOfDay(int offset) {
         Calendar now = Calendar.getInstance();
-        now.setTimeInMillis(now.getTimeInMillis() + now.getTimeZone().getRawOffset());
         if (offset != 0) {
             now.set(Calendar.DAY_OF_YEAR, now.get(Calendar.DAY_OF_YEAR) + offset);
         }
@@ -48,7 +47,6 @@ public class TimeUtility {
      */
     public static long getStartTimeOfWeek(int offset) {
         Calendar now = Calendar.getInstance();
-        now.setTimeInMillis(now.getTimeInMillis() + now.getTimeZone().getRawOffset());
         now.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         // TODO: didn't figure out why this operation can not be done at first.
         if (offset != 0) {
@@ -65,7 +63,6 @@ public class TimeUtility {
      */
     public static long getStartTimeOfMonth(int offset) {
         Calendar now = Calendar.getInstance();
-        now.setTimeInMillis(now.getTimeInMillis() + now.getTimeZone().getRawOffset());
         now.set(Calendar.DAY_OF_MONTH, 1);
         if (offset != 0) {
             now.set(Calendar.MONTH, now.get(Calendar.MONTH) + offset);
@@ -81,7 +78,6 @@ public class TimeUtility {
      */
     public static long getStartTimeOfYear(int offset) {
         Calendar now = Calendar.getInstance();
-        now.setTimeInMillis(now.getTimeInMillis() + now.getTimeZone().getRawOffset());
         now.set(Calendar.DAY_OF_YEAR, 1);
         if (offset != 0) {
             now.set(Calendar.YEAR, now.get(Calendar.YEAR) + offset);
